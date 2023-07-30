@@ -11,6 +11,11 @@
 		E6BF0A142A770FF2006816FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A132A770FF2006816FE /* ContentView.swift */; };
 		E6BF0A162A770FF4006816FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6BF0A152A770FF4006816FE /* Assets.xcassets */; };
 		E6BF0A1A2A770FF4006816FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6BF0A192A770FF4006816FE /* Preview Assets.xcassets */; };
+		E6BF0A212A771009006816FE /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A202A771009006816FE /* Helper.swift */; };
+		E6BF0A232A771019006816FE /* KaartTrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A222A771019006816FE /* KaartTrain.swift */; };
+		E6BF0A252A771027006816FE /* TrainUpdateStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A242A771027006816FE /* TrainUpdateStruct.swift */; };
+		E6BF0A272A7710AA006816FE /* LocationTrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A262A7710AA006816FE /* LocationTrain.swift */; };
+		E6BF0A292A7710CE006816FE /* TrainWebsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +25,11 @@
 		E6BF0A152A770FF4006816FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E6BF0A172A770FF4006816FE /* TrainTrackLive.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrainTrackLive.entitlements; sourceTree = "<group>"; };
 		E6BF0A192A770FF4006816FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E6BF0A202A771009006816FE /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		E6BF0A222A771019006816FE /* KaartTrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KaartTrain.swift; sourceTree = "<group>"; };
+		E6BF0A242A771027006816FE /* TrainUpdateStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainUpdateStruct.swift; sourceTree = "<group>"; };
+		E6BF0A262A7710AA006816FE /* LocationTrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTrain.swift; sourceTree = "<group>"; };
+		E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainWebsocket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +64,11 @@
 			children = (
 				E6BF0A112A770FF2006816FE /* TrainTrackLiveApp.swift */,
 				E6BF0A132A770FF2006816FE /* ContentView.swift */,
+				E6BF0A222A771019006816FE /* KaartTrain.swift */,
+				E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */,
+				E6BF0A262A7710AA006816FE /* LocationTrain.swift */,
+				E6BF0A202A771009006816FE /* Helper.swift */,
+				E6BF0A242A771027006816FE /* TrainUpdateStruct.swift */,
 				E6BF0A152A770FF4006816FE /* Assets.xcassets */,
 				E6BF0A172A770FF4006816FE /* TrainTrackLive.entitlements */,
 				E6BF0A182A770FF4006816FE /* Preview Content */,
@@ -139,8 +154,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6BF0A232A771019006816FE /* KaartTrain.swift in Sources */,
+				E6BF0A292A7710CE006816FE /* TrainWebsocket.swift in Sources */,
 				E6BF0A142A770FF2006816FE /* ContentView.swift in Sources */,
+				E6BF0A252A771027006816FE /* TrainUpdateStruct.swift in Sources */,
 				E6BF0A122A770FF2006816FE /* TrainTrackLiveApp.swift in Sources */,
+				E6BF0A212A771009006816FE /* Helper.swift in Sources */,
+				E6BF0A272A7710AA006816FE /* LocationTrain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +289,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -307,6 +328,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
