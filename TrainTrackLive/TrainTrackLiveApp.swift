@@ -2,7 +2,7 @@
 //  TrainTrackLiveApp.swift
 //  TrainTrackLive
 //
-//  Created by Maarten Wittop Koning on 30/07/2023.
+//  Created by Olivier Wittop Koning on 30/07/2023.
 //
 
 import SwiftUI

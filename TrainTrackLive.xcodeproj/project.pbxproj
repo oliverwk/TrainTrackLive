@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E653C9772A7E3BAC0007596E /* DepartureBoardTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653C9762A7E3BAC0007596E /* DepartureBoardTrack.swift */; };
+		E653C9792A7E40300007596E /* TrainDepartureBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653C9782A7E40300007596E /* TrainDepartureBoard.swift */; };
 		E6BF0A122A770FF2006816FE /* TrainTrackLiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A112A770FF2006816FE /* TrainTrackLiveApp.swift */; };
 		E6BF0A142A770FF2006816FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A132A770FF2006816FE /* ContentView.swift */; };
 		E6BF0A162A770FF4006816FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6BF0A152A770FF4006816FE /* Assets.xcassets */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E653C9762A7E3BAC0007596E /* DepartureBoardTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureBoardTrack.swift; sourceTree = "<group>"; };
+		E653C9782A7E40300007596E /* TrainDepartureBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainDepartureBoard.swift; sourceTree = "<group>"; };
 		E6BF0A0E2A770FF2006816FE /* TrainTrackLive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainTrackLive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6BF0A112A770FF2006816FE /* TrainTrackLiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainTrackLiveApp.swift; sourceTree = "<group>"; };
 		E6BF0A132A770FF2006816FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -67,8 +71,10 @@
 				E6BF0A222A771019006816FE /* KaartTrain.swift */,
 				E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */,
 				E6BF0A262A7710AA006816FE /* LocationTrain.swift */,
-				E6BF0A202A771009006816FE /* Helper.swift */,
 				E6BF0A242A771027006816FE /* TrainUpdateStruct.swift */,
+				E653C9762A7E3BAC0007596E /* DepartureBoardTrack.swift */,
+				E653C9782A7E40300007596E /* TrainDepartureBoard.swift */,
+				E6BF0A202A771009006816FE /* Helper.swift */,
 				E6BF0A152A770FF4006816FE /* Assets.xcassets */,
 				E6BF0A172A770FF4006816FE /* TrainTrackLive.entitlements */,
 				E6BF0A182A770FF4006816FE /* Preview Content */,
@@ -157,8 +163,10 @@
 				E6BF0A232A771019006816FE /* KaartTrain.swift in Sources */,
 				E6BF0A292A7710CE006816FE /* TrainWebsocket.swift in Sources */,
 				E6BF0A142A770FF2006816FE /* ContentView.swift in Sources */,
+				E653C9792A7E40300007596E /* TrainDepartureBoard.swift in Sources */,
 				E6BF0A252A771027006816FE /* TrainUpdateStruct.swift in Sources */,
 				E6BF0A122A770FF2006816FE /* TrainTrackLiveApp.swift in Sources */,
+				E653C9772A7E3BAC0007596E /* DepartureBoardTrack.swift in Sources */,
 				E6BF0A212A771009006816FE /* Helper.swift in Sources */,
 				E6BF0A272A7710AA006816FE /* LocationTrain.swift in Sources */,
 			);

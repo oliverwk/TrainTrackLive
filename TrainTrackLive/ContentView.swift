@@ -21,17 +21,18 @@ struct ContentView: View {
                     .foregroundColor(.accentColor)
                 Text("Hello, world!")
                 
-                NavigationLink("Go Go train") {
+                NavigationLink("Go go to trains") {
                     KaartTrain()
-                }
-                NavigationLink {
-                    KaartTrain()
-                } label: {
-                    Button(action: {}, label: {
-                        Text("Go to trains")
-                    })
-                    .buttonStyle(.borderedProminent)
-                }
+                }.padding(9)
+                    .background(.blue)
+                    .foregroundStyle(.white)
+                    .cornerRadius(7)
+                NavigationLink("Depatures Bergün") {
+                    DepartureBoardTrack()
+                }.padding(9)
+                    .background(.green)
+                    .foregroundStyle(.white)
+                    .cornerRadius(7)
             }
         }
     }
