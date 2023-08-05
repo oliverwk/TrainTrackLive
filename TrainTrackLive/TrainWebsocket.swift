@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
 import MapKit
 import os
+
 
 class TrainWebsocket: ObservableObject {
     
@@ -26,7 +28,7 @@ class TrainWebsocket: ObservableObject {
     }
     
     private func connect() {
-        guard let url = URL(string: "wss://api.geops.io/tracker-ws/v1/?key=5cc87b12d7c5370001c1d655dbb57411303540368c06d2c453f19a08") else { return }
+        guard let url = URL(string: "wss://api.geops.io/tracker-ws/v1/?key=5cc87b12d7c5370001c1d655d703afb6966843b3a8e5e5cbb3a99320") else { return }
         let request = URLRequest(url: url)
         webSocketTask = URLSession.shared.webSocketTask(with: request)
         webSocketTask?.resume()
@@ -58,7 +60,7 @@ class TrainWebsocket: ObservableObject {
                         let data = text.data(using: .utf8)!
                         self.logger.log("There was data from the server")
                         trainUpdate = try? JSONDecoder().decode(TrainUpdate.self, from: data)
-                       
+                        
                         if trainUpdate?.source == "websocket" {
                             self.logger.log("Het was een status open bericht")
                             return
@@ -83,26 +85,35 @@ class TrainWebsocket: ObservableObject {
                         self.logger.log("TrainUpdate is door en nu locaties toevoegen")
                         for itemks in trainUpdateSafe.content {
                             if let itemk = itemks {
-                                print(itemk.content.geometry.coordinates)
-                                let trainName = "\(itemk.content.properties.tenant) \(itemk.content.properties.type) \(itemk.content.properties.line.name)"
+                                self.logger.log("\(itemk.content.geometry.coordinates)")
+                                let trainName = "\(itemk.content.properties.type) \(itemk.content.properties.tenant.uppercased())  \(itemk.content.properties.line.name)"
                                 let clName = itemk.content.properties.line.color
+                                let TrueColourName = (clName ?? "#0xff0000").dropFirst(2)
+                                let cl = Color(hex: String(TrueColourName))
+                                let containsTrainAlready = self.locations.contains { return $0.id == itemk.content.properties.trainID }
                                 
-                                
-                                /*for lccord in itemk.content.geometry.coordinates {
-                                    self.locations.append(LocationTrain(id: itemk.content.properties.trainID, name: trainName, opData: itemk.content, colourName: clName ?? "#ff0000", coordinates: [lccord], timeIntervals: itemk.content.properties.timeIntervals))
-                                }*/
-                                
-                                let containsTrainAlready = self.locations.contains { location in
-                                    return location.id == itemk.content.properties.trainID
+                                DispatchQueue.main.async {
+                                    self.locations = self.locations.map {
+                                        if $0.id == itemk.content.properties.trainID {
+                                            return LocationTrain(id: itemk.content.properties.trainID, name: trainName, opData: itemk.content, colour: cl, coordinates: itemk.content.geometry.coordinates, timeIntervals: itemk.content.properties.timeIntervals)
+                                        } else {
+                                            return $0
+                                        }
+                                    }
                                 }
+                                
+                                
+                                
+                                
                                 if !containsTrainAlready {
                                     DispatchQueue.main.async {
-                                        self.locations.append(LocationTrain(id: itemk.content.properties.trainID, name: trainName, opData: itemk.content, colourName: clName ?? "#ff0000", coordinates: itemk.content.geometry.coordinates, timeIntervals: itemk.content.properties.timeIntervals))
+                                        self.locations.append(LocationTrain(id: itemk.content.properties.trainID, name: trainName, opData: itemk.content, colour: cl, coordinates: itemk.content.geometry.coordinates, timeIntervals: itemk.content.properties.timeIntervals))
                                     }
                                     self.logger.log("Een nieuw location toegevoeg  name:\(trainName, privacy: .public) en locatie: \(itemk.content.geometry.coordinates, privacy: .public)")
                                 } else {
-                                    self.logger.log("Het id zit al in de locatoin")
+                                    self.logger.log("Het id zit al in de location")
                                 }
+                                
                                 /*let testline = MKPolyline(coordinates: testcoords, count: testcoords.count)
                                  for each in 0..<testcoords.count{
                                  let anno = MKPointAnnotation()

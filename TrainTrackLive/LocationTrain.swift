@@ -13,7 +13,7 @@ struct LocationTrain: Identifiable {
     let id: String
     let name: String
     let opData: Any
-    let colourName: String
+    let colour: Color
     let coordinates: [[Float]]
     let timeIntervals: [[Int]]
     var coordinateMap: CLLocationCoordinate2D {
@@ -40,11 +40,8 @@ struct LocationTrain: Identifiable {
         
         // let index = Float(coordinatesMap.count/2)
         print("the mid cord index: \(index)")
-        print("the mid cord: \(coordinatesMap[Int(index)])")
+        print("the mid cord index: \(coordinatesMap[Int(index)])")
         return coordinatesMap[Int(index)]
     }
-    var colour: Color {
-        let TrueColourName = colourName.dropFirst(2)
-        return Color(hex: String(TrueColourName))
-    }
+   
 }

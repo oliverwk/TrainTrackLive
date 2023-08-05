@@ -11,7 +11,7 @@ import os
 
 struct KaartTrain: View {
     @State private var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 46.63, longitude: 9.74), span: MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2))
-    
+    @State private var trainName = "All aboard"
     @ObservedObject var websocket = TrainWebsocket()
     
     let logger = Logger(
@@ -22,9 +22,10 @@ struct KaartTrain: View {
     var body: some View {
         VStack {
             HStack {
-                Image(systemName: "globe")
+                Image(systemName: "train.side.front.car")
                     .imageScale(.large)
                     .foregroundColor(.accentColor)
+                Text(trainName)
                 Button {
                     websocket.receiveMessage()
                 } label: {
@@ -34,16 +35,17 @@ struct KaartTrain: View {
             Map(coordinateRegion: $mapRegion, annotationItems: websocket.locations) { location in
                 MapAnnotation(coordinate: location.middleCoordinatesMap) {
                     Circle()
-                        .stroke(.red, lineWidth: 5)
+                       // .stroke(location.name.contains("train") ? .red : .blue, lineWidth: 5)
                         .frame(width: 10, height: 10)
                         .onTapGesture {
-                            print("Tapped on \(location.name)")
-                            print("Cords real \(location.coordinatesMap)")
-                            print("mapRegion: \(mapRegion.center.longitude)")
+                            self.trainName = location.name
+                            logger.log("Tapped on \(location.name, privacy: .public)")
+                            logger.log("Cords real \(location.coordinatesMap, privacy: .public)")
+                            logger.log("mapRegion: \(mapRegion.center.longitude, privacy: .public)")
                         }
                 }
                 
-            }.cornerRadius(10.0, antialiased: true)
+            }.ignoresSafeArea(.container)
         }
     }
 }
