@@ -12,7 +12,7 @@ import SwiftUI
 struct LocationTrain: Identifiable {
     let id: String
     let name: String
-    let opData: Any
+    let opData: TrainUpdateContent
     let colour: Color
     let coordinates: [[Float]]
     let timeIntervals: [[Int]]
@@ -28,6 +28,7 @@ struct LocationTrain: Identifiable {
             return CLLocationCoordinate2D(latitude: Double(RealCordinates[1]), longitude: Double(RealCordinates[0]))
         }
     }
+    
     var middleCoordinatesMap: CLLocationCoordinate2D {
         // https://pub.tik.ee.ethz.ch/students/2022-FS/SA-2022-24.pdf
         let tstart = Float(timeIntervals[0][0]/1000)

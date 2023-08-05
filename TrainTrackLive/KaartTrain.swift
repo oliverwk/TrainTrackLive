@@ -25,6 +25,7 @@ struct KaartTrain: View {
                 Image(systemName: "train.side.front.car")
                     .imageScale(.large)
                     .foregroundColor(.accentColor)
+                    .scaleEffect(x: -1, y: 1)
                 Text(trainName)
                 Button {
                     websocket.receiveMessage()
@@ -35,10 +36,10 @@ struct KaartTrain: View {
             Map(coordinateRegion: $mapRegion, annotationItems: websocket.locations) { location in
                 MapAnnotation(coordinate: location.middleCoordinatesMap) {
                     Circle()
-                       // .stroke(location.name.contains("train") ? .red : .blue, lineWidth: 5)
+                        .stroke(.red, lineWidth: 5)
                         .frame(width: 10, height: 10)
                         .onTapGesture {
-                            self.trainName = location.name
+                            self.trainName = "\(location.name)\n from \(location.opData.content.properties.line.name)"
                             logger.log("Tapped on \(location.name, privacy: .public)")
                             logger.log("Cords real \(location.coordinatesMap, privacy: .public)")
                             logger.log("mapRegion: \(mapRegion.center.longitude, privacy: .public)")

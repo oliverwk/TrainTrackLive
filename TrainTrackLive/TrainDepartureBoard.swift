@@ -7,21 +7,27 @@
 
 import Foundation
 import MapKit
-
+import SwiftUI
 
 // MARK: - TrainDepartureBoard
-struct TrainDepartureBoard: Codable {
+struct TrainDepartureBoard: Codable, CustomDebugStringConvertible {
     let station: TrainStation
     let stationboard: [Stationboard]
+    var debugDescription: String {
+        return "station: \(station), stationboard: \(stationboard.debugDescription)"
+    }
 }
 
 // MARK: - TrainStation
-struct TrainStation: Codable {
+struct TrainStation: Codable, Identifiable, CustomStringConvertible {
     let id: String
     let name: String?
     let score: String?
     let coordinate: Coordinate
-    let distance: Double?
+    let distance: String?
+    var description: String {
+        return "id: \(id), name: \(String(describing: name)), score: \(String(describing: score)), coordinate \(coordinate.swiftCoordinate), distance: \(String(describing: distance))"
+    }
 }
 
 // MARK: - Coordinate
@@ -38,14 +44,16 @@ enum TypeEnum: String, Codable {
 }
 
 // MARK: - Stationboard
-struct Stationboard: Codable {
+struct Stationboard: Codable, Identifiable {
+    let id = UUID()
     let stop: Stop
     let name, category: String
     let subcategory, categoryCode: String?
     let number, stationboardOperator, to: String
     let passList: [PassList]
     let capacity1St, capacity2Nd: String?
-
+    let tapped = false
+   
     enum CodingKeys: String, CodingKey {
         case stop, name, category, subcategory, categoryCode, number
         case stationboardOperator = "operator"
@@ -58,26 +66,37 @@ struct Stationboard: Codable {
 // MARK: - PassList
 struct PassList: Codable {
     let station: TrainStation
-    let arrival: Date?
+    let arrival:  String?// Date?
+    var arrivalDate: Date {
+        return Date(timeIntervalSince1970: Double(arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+    }
     let arrivalTimestamp: Int?
-    let departure: Date?
+    let departureTime: String?// Date?
     let departureTimestamp: Int?
-    let delay: Int
+    var departureDate: Date {
+        return Date(timeIntervalSince1970: Double(departureTimestamp!))
+    }
+    let delay: Int?
     let platform: String?
     let prognosis: Prognosis
     let realtimeAvailability: Bool?
     let location: TrainStation
+    enum CodingKeys: String, CodingKey {
+        case station,arrival,arrivalTimestamp,departureTimestamp,delay,platform,prognosis,realtimeAvailability,location
+        case departureTime = "departure"
+    }
 }
 
 // MARK: - Prognosis
 struct Prognosis: Codable {
     let platform: String?
-    let arrival: Date
-    let departure: Date?
+    let arrival: String?// Date?
+    let departureTime: String?// Date?
     let capacity1St, capacity2Nd: String?
 
     enum CodingKeys: String, CodingKey {
-        case platform, arrival, departure
+        case platform, arrival
+        case departureTime = "departure"
         case capacity1St = "capacity1st"
         case capacity2Nd = "capacity2nd"
     }
@@ -86,11 +105,22 @@ struct Prognosis: Codable {
 // MARK: - Stop
 struct Stop: Codable {
     let station: TrainStation
-    let arrival, arrivalTimestamp: String?
-    let departure: Date
-    let departureTimestamp, delay: Int
+    let arrival: String?
+    let arrivalTimestamp: Int?
+    var arrivalDate: Date {
+        return Date(timeIntervalSince1970: Double(arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+    }
+    let departureTime: String?// Date?
+    let departureTimestamp, delay: Int?
+    var departureDate: Date {
+        return Date(timeIntervalSince1970: Double(departureTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+    }
     let platform: String?
     let prognosis: Prognosis
     let realtimeAvailability: Bool?
     let location: TrainStation
+    enum CodingKeys: String, CodingKey {
+        case station,arrival,arrivalTimestamp,departureTimestamp,delay,platform,prognosis,realtimeAvailability,location
+        case departureTime = "departure"
+    }
 }

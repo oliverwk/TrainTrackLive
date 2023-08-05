@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E634D3322A7EF0A9004B877E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E634D3312A7EF0A9004B877E /* WidgetKit.framework */; };
+		E634D3342A7EF0A9004B877E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E634D3332A7EF0A9004B877E /* SwiftUI.framework */; };
+		E634D3372A7EF0A9004B877E /* TrainTrackWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E634D3362A7EF0A9004B877E /* TrainTrackWidgetBundle.swift */; };
+		E634D3392A7EF0A9004B877E /* TrainTrackWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E634D3382A7EF0A9004B877E /* TrainTrackWidgetLiveActivity.swift */; };
+		E634D33B2A7EF0A9004B877E /* TrainTrackWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E634D33A2A7EF0A9004B877E /* TrainTrackWidget.swift */; };
+		E634D33D2A7EF0AB004B877E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E634D33C2A7EF0AB004B877E /* Assets.xcassets */; };
+		E634D3412A7EF0AB004B877E /* TrainTrackWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E634D32F2A7EF0A9004B877E /* TrainTrackWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E634D3472A7EF790004B877E /* TrainDepartureBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653C9782A7E40300007596E /* TrainDepartureBoard.swift */; };
+		E634D3482A7F040B004B877E /* TrainTrackWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E634D3382A7EF0A9004B877E /* TrainTrackWidgetLiveActivity.swift */; };
+		E634D3492A7F0C9F004B877E /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A202A771009006816FE /* Helper.swift */; };
 		E653C9772A7E3BAC0007596E /* DepartureBoardTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653C9762A7E3BAC0007596E /* DepartureBoardTrack.swift */; };
 		E653C9792A7E40300007596E /* TrainDepartureBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653C9782A7E40300007596E /* TrainDepartureBoard.swift */; };
 		E6BF0A122A770FF2006816FE /* TrainTrackLiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A112A770FF2006816FE /* TrainTrackLiveApp.swift */; };
@@ -20,7 +30,40 @@
 		E6BF0A292A7710CE006816FE /* TrainWebsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E634D33F2A7EF0AB004B877E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E6BF0A062A770FF2006816FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E634D32E2A7EF0A9004B877E;
+			remoteInfo = TrainTrackWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E634D3422A7EF0AB004B877E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E634D3412A7EF0AB004B877E /* TrainTrackWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		E634D32F2A7EF0A9004B877E /* TrainTrackWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TrainTrackWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E634D3312A7EF0A9004B877E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		E634D3332A7EF0A9004B877E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		E634D3362A7EF0A9004B877E /* TrainTrackWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainTrackWidgetBundle.swift; sourceTree = "<group>"; };
+		E634D3382A7EF0A9004B877E /* TrainTrackWidgetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainTrackWidgetLiveActivity.swift; sourceTree = "<group>"; };
+		E634D33A2A7EF0A9004B877E /* TrainTrackWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainTrackWidget.swift; sourceTree = "<group>"; };
+		E634D33C2A7EF0AB004B877E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E634D33E2A7EF0AB004B877E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E634D3462A7EF0E2004B877E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E653C9762A7E3BAC0007596E /* DepartureBoardTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureBoardTrack.swift; sourceTree = "<group>"; };
 		E653C9782A7E40300007596E /* TrainDepartureBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainDepartureBoard.swift; sourceTree = "<group>"; };
 		E6BF0A0E2A770FF2006816FE /* TrainTrackLive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainTrackLive.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,6 +80,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E634D32C2A7EF0A9004B877E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E634D3342A7EF0A9004B877E /* SwiftUI.framework in Frameworks */,
+				E634D3322A7EF0A9004B877E /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E6BF0A0B2A770FF2006816FE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -47,10 +99,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E634D3302A7EF0A9004B877E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E634D3312A7EF0A9004B877E /* WidgetKit.framework */,
+				E634D3332A7EF0A9004B877E /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E634D3352A7EF0A9004B877E /* TrainTrackWidget */ = {
+			isa = PBXGroup;
+			children = (
+				E634D3362A7EF0A9004B877E /* TrainTrackWidgetBundle.swift */,
+				E634D3382A7EF0A9004B877E /* TrainTrackWidgetLiveActivity.swift */,
+				E634D33A2A7EF0A9004B877E /* TrainTrackWidget.swift */,
+				E634D33C2A7EF0AB004B877E /* Assets.xcassets */,
+				E634D33E2A7EF0AB004B877E /* Info.plist */,
+			);
+			path = TrainTrackWidget;
+			sourceTree = "<group>";
+		};
 		E6BF0A052A770FF2006816FE = {
 			isa = PBXGroup;
 			children = (
 				E6BF0A102A770FF2006816FE /* TrainTrackLive */,
+				E634D3352A7EF0A9004B877E /* TrainTrackWidget */,
+				E634D3302A7EF0A9004B877E /* Frameworks */,
 				E6BF0A0F2A770FF2006816FE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				E6BF0A0E2A770FF2006816FE /* TrainTrackLive.app */,
+				E634D32F2A7EF0A9004B877E /* TrainTrackWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -66,6 +142,7 @@
 		E6BF0A102A770FF2006816FE /* TrainTrackLive */ = {
 			isa = PBXGroup;
 			children = (
+				E634D3462A7EF0E2004B877E /* Info.plist */,
 				E6BF0A112A770FF2006816FE /* TrainTrackLiveApp.swift */,
 				E6BF0A132A770FF2006816FE /* ContentView.swift */,
 				E6BF0A222A771019006816FE /* KaartTrain.swift */,
@@ -93,6 +170,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E634D32E2A7EF0A9004B877E /* TrainTrackWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E634D3452A7EF0AB004B877E /* Build configuration list for PBXNativeTarget "TrainTrackWidgetExtension" */;
+			buildPhases = (
+				E634D32B2A7EF0A9004B877E /* Sources */,
+				E634D32C2A7EF0A9004B877E /* Frameworks */,
+				E634D32D2A7EF0A9004B877E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TrainTrackWidgetExtension;
+			productName = TrainTrackWidgetExtension;
+			productReference = E634D32F2A7EF0A9004B877E /* TrainTrackWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		E6BF0A0D2A770FF2006816FE /* TrainTrackLive */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E6BF0A1D2A770FF4006816FE /* Build configuration list for PBXNativeTarget "TrainTrackLive" */;
@@ -100,10 +194,12 @@
 				E6BF0A0A2A770FF2006816FE /* Sources */,
 				E6BF0A0B2A770FF2006816FE /* Frameworks */,
 				E6BF0A0C2A770FF2006816FE /* Resources */,
+				E634D3422A7EF0AB004B877E /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E634D3402A7EF0AB004B877E /* PBXTargetDependency */,
 			);
 			name = TrainTrackLive;
 			productName = TrainTrackLive;
@@ -120,6 +216,9 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					E634D32E2A7EF0A9004B877E = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
 					E6BF0A0D2A770FF2006816FE = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
@@ -139,11 +238,20 @@
 			projectRoot = "";
 			targets = (
 				E6BF0A0D2A770FF2006816FE /* TrainTrackLive */,
+				E634D32E2A7EF0A9004B877E /* TrainTrackWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E634D32D2A7EF0A9004B877E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E634D33D2A7EF0AB004B877E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E6BF0A0C2A770FF2006816FE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -156,11 +264,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E634D32B2A7EF0A9004B877E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E634D33B2A7EF0A9004B877E /* TrainTrackWidget.swift in Sources */,
+				E634D3372A7EF0A9004B877E /* TrainTrackWidgetBundle.swift in Sources */,
+				E634D3492A7F0C9F004B877E /* Helper.swift in Sources */,
+				E634D3472A7EF790004B877E /* TrainDepartureBoard.swift in Sources */,
+				E634D3392A7EF0A9004B877E /* TrainTrackWidgetLiveActivity.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E6BF0A0A2A770FF2006816FE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E6BF0A232A771019006816FE /* KaartTrain.swift in Sources */,
+				E634D3482A7F040B004B877E /* TrainTrackWidgetLiveActivity.swift in Sources */,
 				E6BF0A292A7710CE006816FE /* TrainWebsocket.swift in Sources */,
 				E6BF0A142A770FF2006816FE /* ContentView.swift in Sources */,
 				E653C9792A7E40300007596E /* TrainDepartureBoard.swift in Sources */,
@@ -174,7 +295,76 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		E634D3402A7EF0AB004B877E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E634D32E2A7EF0A9004B877E /* TrainTrackWidgetExtension */;
+			targetProxy = E634D33F2A7EF0AB004B877E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		E634D3432A7EF0AB004B877E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6CDWQZK7UX;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrainTrackWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TrainTrackWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.wittopkoning.TrainTrackLive.TrainTrackWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E634D3442A7EF0AB004B877E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6CDWQZK7UX;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrainTrackWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TrainTrackWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.wittopkoning.TrainTrackLive.TrainTrackWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		E6BF0A1B2A770FF4006816FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -287,6 +477,7 @@
 		E6BF0A1E2A770FF4006816FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TrainTrackLive/TrainTrackLive.entitlements;
@@ -297,7 +488,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrainTrackLive/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Train Track Live";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -306,8 +500,7 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -326,6 +519,7 @@
 		E6BF0A1F2A770FF4006816FE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TrainTrackLive/TrainTrackLive.entitlements;
@@ -336,7 +530,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrainTrackLive/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Train Track Live";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -345,8 +542,7 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -365,6 +561,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E634D3452A7EF0AB004B877E /* Build configuration list for PBXNativeTarget "TrainTrackWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E634D3432A7EF0AB004B877E /* Debug */,
+				E634D3442A7EF0AB004B877E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E6BF0A092A770FF2006816FE /* Build configuration list for PBXProject "TrainTrackLive" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

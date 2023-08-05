@@ -43,6 +43,8 @@ class TrainWebsocket: ObservableObject {
         receiveMessage()
     }
     
+    func probeerIets() throws -> Bool { return true }
+    
     func receiveMessage() {
         webSocketTask?.receive { result in
             switch result {
@@ -60,6 +62,8 @@ class TrainWebsocket: ObservableObject {
                         let data = text.data(using: .utf8)!
                         self.logger.log("There was data from the server")
                         trainUpdate = try? JSONDecoder().decode(TrainUpdate.self, from: data)
+                        
+                        let _ = try self.probeerIets()// Dit is om de error weg te krijgen
                         
                         if trainUpdate?.source == "websocket" {
                             self.logger.log("Het was een status open bericht")
@@ -86,33 +90,33 @@ class TrainWebsocket: ObservableObject {
                         for itemks in trainUpdateSafe.content {
                             if let itemk = itemks {
                                 self.logger.log("\(itemk.content.geometry.coordinates)")
-                                let trainName = "\(itemk.content.properties.type) \(itemk.content.properties.tenant.uppercased())  \(itemk.content.properties.line.name)"
+                                let trainName = " \(itemk.content.properties.tenant.uppercased()) \(itemk.content.properties.type.firstCapitalized) \(itemk.content.properties.line.name)"
                                 let clName = itemk.content.properties.line.color
                                 let TrueColourName = (clName ?? "#0xff0000").dropFirst(2)
                                 let cl = Color(hex: String(TrueColourName))
                                 let containsTrainAlready = self.locations.contains { return $0.id == itemk.content.properties.trainID }
                                 
-                                DispatchQueue.main.async {
-                                    self.locations = self.locations.map {
-                                        if $0.id == itemk.content.properties.trainID {
-                                            return LocationTrain(id: itemk.content.properties.trainID, name: trainName, opData: itemk.content, colour: cl, coordinates: itemk.content.geometry.coordinates, timeIntervals: itemk.content.properties.timeIntervals)
-                                        } else {
-                                            return $0
-                                        }
-                                    }
-                                }
-                                
-                                
-                                
                                 
                                 if !containsTrainAlready {
                                     DispatchQueue.main.async {
-                                        self.locations.append(LocationTrain(id: itemk.content.properties.trainID, name: trainName, opData: itemk.content, colour: cl, coordinates: itemk.content.geometry.coordinates, timeIntervals: itemk.content.properties.timeIntervals))
+                                        self.locations.append(LocationTrain(id: itemk.content.properties.trainID, name: trainName, opData: itemk, colour: cl, coordinates: itemk.content.geometry.coordinates, timeIntervals: itemk.content.properties.timeIntervals))
                                     }
                                     self.logger.log("Een nieuw location toegevoeg  name:\(trainName, privacy: .public) en locatie: \(itemk.content.geometry.coordinates, privacy: .public)")
                                 } else {
                                     self.logger.log("Het id zit al in de location")
                                 }
+                                
+                                
+                                DispatchQueue.main.async {
+                                    self.locations = self.locations.map { location in
+                                        if location.id == itemk.content.properties.trainID {
+                                            return LocationTrain(id: itemk.content.properties.trainID, name: trainName, opData: itemk, colour: cl, coordinates: itemk.content.geometry.coordinates, timeIntervals: itemk.content.properties.timeIntervals)
+                                        } else {
+                                            return location
+                                        }
+                                    }
+                                }
+
                                 
                                 /*let testline = MKPolyline(coordinates: testcoords, count: testcoords.count)
                                  for each in 0..<testcoords.count{
