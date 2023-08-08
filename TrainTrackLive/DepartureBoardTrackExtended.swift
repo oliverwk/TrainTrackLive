@@ -12,7 +12,7 @@ import os
 extension DepartureBoardTrack {
     func GoLive(_ i: Int) -> Void {
         if ActivityAuthorizationInfo().areActivitiesEnabled {
-            let currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
+            var currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
                 if stop.station.name != nil {
                     if (Date.now.timeIntervalSince1970 > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.timeIntervalSince1970) {
                         // De trein is hier nog niet geweest
@@ -23,13 +23,24 @@ extension DepartureBoardTrack {
                 } else {
                     return false
                 }
+            }.first
+            
+            if currentORArrivingStation == nil {
+                currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
+                    if stop.station.name != nil {
+                        return true
+                    } else {
+                        return false
+                    }
+                }.first
             }
+            
             let tnow = Double(Date.now.timeIntervalSince1970)
             let tstart = Double(trainDepartures.departures[i].stop.departureTimestamp!)
             let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970))
             let fracs = (tnow - tstart)/(tend - tstart)
             print("fracs: \(fracs)")
-            let initialContentState = TrainTrackWidgetAttributes.ContentState(fracBegin: fracs, CurrentORArrivingStation: currentORArrivingStation.first?.station.name ?? " ", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now, currentTijd: currentORArrivingStation.first?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation.first?.arrivalDate ?? Date.now) - (currentORArrivingStation.first?.departureDate ?? Date.now)))
+            let initialContentState = TrainTrackWidgetAttributes.ContentState(fracBegin: fracs, CurrentORArrivingStation: currentORArrivingStation?.station.name ?? " ", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now, currentTijd: currentORArrivingStation?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation?.arrivalDate ?? Date.now) - (currentORArrivingStation?.departureDate ?? Date.now)))
             
             let activityAttributes = TrainTrackWidgetAttributes(StartStationName: trainDepartures.departures[i].stop.station.name!, EndStationName: trainDepartures.departures[i].to, TrainName: "\(trainDepartures.departures[i].stationboardOperator) \(trainDepartures.departures[i].category) \(trainDepartures.departures[i].name.replacingOccurrences(of: "0", with: ""))")
             

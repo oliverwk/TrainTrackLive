@@ -28,7 +28,7 @@ struct DepartureBoardTrack: View {
                                 Text("\(trainDepartures.departures[i].stop.departureDate.formatted(date: .omitted, time: .shortened)) --> \(trainDepartures.departures[i].to)")
                                 Spacer()
                                 Button {
-                                    let currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
+                                    var currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
                                         if stop.station.name != nil {
                                             if (Date.now.timeIntervalSince1970 > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.timeIntervalSince1970) {
                                                 // De trein is hier nog niet geweest
@@ -39,16 +39,27 @@ struct DepartureBoardTrack: View {
                                         } else {
                                             return false
                                         }
+                                    }.first
+                                    
+                                    if currentORArrivingStation == nil {
+                                        currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
+                                            if stop.station.name != nil {
+                                                return true
+                                            } else {
+                                                return false
+                                            }
+                                        }.first
                                     }
+                                    
                                     let tnow = Double(Date.now.timeIntervalSince1970)
                                     let tstart = Double(trainDepartures.departures[i].stop.departureTimestamp!)
                                     let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970))
                                     let fracs = (tnow - tstart)/(tend - tstart)
                                     print("fracs: \(fracs)")
-                                    let updatedTrainStatus = TrainTrackWidgetAttributes.ContentState(fracBegin: fracs, CurrentORArrivingStation: currentORArrivingStation.first?.station.name ?? "Nergens", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now, currentTijd: currentORArrivingStation.first?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation.first?.arrivalDate ?? Date.now) - (currentORArrivingStation.first?.departureDate ?? Date.now)))
+                                    let updatedTrainStatus = TrainTrackWidgetAttributes.ContentState(fracBegin: fracs, CurrentORArrivingStation: currentORArrivingStation?.station.name ?? "Nergens", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now, currentTijd: currentORArrivingStation?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation?.arrivalDate ?? Date.now) - (currentORArrivingStation?.departureDate ?? Date.now)))
                                     
                                     let alertConfiguration: AlertConfiguration?
-                                    if Int(Date.now.unix) > trainDepartures.departures[i].stop.arrivalTimestamp! && trainDepartures.departures[i].stop.departureTimestamp! < Int(Date.now.unix) {
+                                    if Int(Date.now.unix) >= trainDepartures.departures[i].stop.arrivalTimestamp ?? Date.now.unix.int && trainDepartures.departures[i].stop.departureTimestamp ?? Date.now.unix.int <= Int(Date.now.unix) {
                                         alertConfiguration = AlertConfiguration(title: "Trein vertrekt", body: "De trein van \(trainDepartures.departures[i].stop.departureDate.uurMinTekst) vertrekt nu", sound: .default)
                                     } else {
                                         alertConfiguration = nil
@@ -85,8 +96,8 @@ struct DepartureBoardTrack: View {
             }
         }
         .onChange(of: trainDepartures.stationSelected) { scope in
+            print("Getting new departures from serach field met onChange, met naam: \(scope.name ?? "Geen naam") met id: \(scope.id)")
             Task {
-                print("Getting new departures from serach field met onChange, met naam: \(scope.name ?? "Geen naam") met id: \(scope.id)")
 //                trainDepartures.departures = []
                 await trainDepartures.getDepartures(stationId: Int(scope.id) ?? 8509197)
                 self.stationNaam = scope.name ?? scope.id

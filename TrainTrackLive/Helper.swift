@@ -101,6 +101,12 @@ extension Date {
     }
 }
 
+extension Double {
+    var int: Int {
+        return Int(self)
+    }
+}
+
 extension TimeInterval {
     var difInSec: String {
         let formatter = DateComponentsFormatter()

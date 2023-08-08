@@ -99,6 +99,8 @@ struct TrainTrackWidgetLiveActivity: Widget {
                         Text("+\(context.state.delay ?? 0)m")
                             .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
                             .font(.callout)
+                    } else {
+                        Text("           ")
                     }
                   
                 }
