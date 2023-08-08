@@ -28,7 +28,16 @@ class TrainWebsocket: ObservableObject {
     }
     
     private func connect() {
-        guard let url = URL(string: "wss://api.geops.io/tracker-ws/v1/?key=5cc87b12d7c5370001c1d655d703afb6966843b3a8e5e5cbb3a99320") else { return }
+        let map_key: String
+        if (UserDefaults.standard.string(forKey: "token_map") != nil) {
+            self.logger.log("Er was een map token gevonden in settings, die moet worden bewaard in de instellingen app. Dit is hem: \(String(describing: UserDefaults.standard.string(forKey: "token_map")), privacy: .public)")
+            map_key = UserDefaults.standard.string(forKey: "token_map") ?? "5cc87b12d7c5370001c1d655842890e432df4736b3553feb3c7cd2d6"
+            UserDefaults.standard.set(UserDefaults.standard.string(forKey: "token_map"), forKey: "token_map")
+        } else {
+            map_key = "5cc87b12d7c5370001c1d655842890e432df4736b3553feb3c7cd2d6"
+            UserDefaults.standard.set(map_key, forKey: "token_map")
+        }
+        guard let url = URL(string: "wss://api.geops.io/tracker-ws/v1/?key=\(map_key)") else { return }
         let request = URLRequest(url: url)
         webSocketTask = URLSession.shared.webSocketTask(with: request)
         webSocketTask?.resume()
@@ -55,7 +64,7 @@ class TrainWebsocket: ObservableObject {
                 case .string(let text):
                     self.messages.append(text)
                     // JSON parse
-                    var geoJson = [MKGeoJSONObject]()
+                    let geoJson = [MKGeoJSONObject]()
                     var overlays = [MKOverlay]()
                     let trainUpdate: TrainUpdate?
                     do {

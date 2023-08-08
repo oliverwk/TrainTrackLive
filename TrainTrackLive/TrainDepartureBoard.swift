@@ -9,6 +9,14 @@ import Foundation
 import MapKit
 import SwiftUI
 
+// MARK: - TrainStations
+struct TrainStations: Codable, CustomDebugStringConvertible {
+    let stations: [TrainStation]
+    var debugDescription: String {
+        return "stations: \(stations)"
+    }
+}
+
 // MARK: - TrainDepartureBoard
 struct TrainDepartureBoard: Codable, CustomDebugStringConvertible {
     let station: TrainStation
@@ -19,19 +27,42 @@ struct TrainDepartureBoard: Codable, CustomDebugStringConvertible {
 }
 
 // MARK: - TrainStation
-struct TrainStation: Codable, Identifiable, CustomStringConvertible {
+struct TrainStation: Codable, Identifiable, CustomStringConvertible, Hashable, Equatable {
+    init(berguen: Bool) {
+            self.id = "8509197"
+            self.name = "Bergün"
+            self.score = nil
+            self.coordinate = Coordinate(type: .wgs84, x: 46.603, y: 9.740)
+            self.distance = nil
+            self.icon = "train"
+    }
+    
+    init(id: String, name: String?, score: String?, coordinate: Coordinate, distance: String?, icon: String?) {
+        self.id = id
+        self.name = name
+        self.score = score
+        self.coordinate = coordinate
+        self.distance = distance
+        self.icon = icon
+    }
+    
+    static func == (lhs: TrainStation, rhs: TrainStation) -> Bool {
+        return lhs.description == rhs.description
+    }
+    
     let id: String
     let name: String?
     let score: String?
     let coordinate: Coordinate
     let distance: String?
+    let icon: String?
     var description: String {
         return "id: \(id), name: \(String(describing: name)), score: \(String(describing: score)), coordinate \(coordinate.swiftCoordinate), distance: \(String(describing: distance))"
     }
 }
 
 // MARK: - Coordinate
-struct Coordinate: Codable {
+struct Coordinate: Codable, Hashable {
     let type: TypeEnum
     let x, y: Double?
     var swiftCoordinate: CLLocationCoordinate2D {

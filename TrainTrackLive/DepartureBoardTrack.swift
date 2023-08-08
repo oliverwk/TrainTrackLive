@@ -15,94 +15,61 @@ import os
 // het id van berugen is 8509197
 
 struct DepartureBoardTrack: View {
+    @State private var stationNaam = "8509197"
     @ObservedObject var trainDepartures = TrainDepartures(id: 8509197)
     
     var body: some View {
         NavigationView {
             VStack {
-               
                 List {
                     ForEach(0...(trainDepartures.departures.count-1), id: \.self) { i in
                         Section(trainDepartures.departures[i].stop.station.name!) {
                             HStack {
                                 Text("\(trainDepartures.departures[i].stop.departureDate.formatted(date: .omitted, time: .shortened)) --> \(trainDepartures.departures[i].to)")
                                 Spacer()
-                                Button("GO LIVE") {
-                                    if ActivityAuthorizationInfo().areActivitiesEnabled {
-                                        let currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
-                                            if stop.station.name != nil {
-                                                if (Date.now.timeIntervalSince1970 > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.timeIntervalSince1970) {
-                                                    // De trein is hier nog niet geweest
-                                                    return true
-                                                } else {
-                                                    return false
-                                                }
+                                Button {
+                                    let currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
+                                        if stop.station.name != nil {
+                                            if (Date.now.timeIntervalSince1970 > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.timeIntervalSince1970) {
+                                                // De trein is hier nog niet geweest
+                                                return true
                                             } else {
                                                 return false
                                             }
+                                        } else {
+                                            return false
                                         }
-                                        
-                                        let initialContentState = TrainTrackWidgetAttributes.ContentState(frac: 0.8, CurrentORArrivingStation: currentORArrivingStation.first?.station.name ?? "Nergens", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.arrivalDate ?? Date.now, currentTijd: currentORArrivingStation.first?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation.first?.arrivalDate ?? Date.now) - (currentORArrivingStation.first?.departureDate ?? Date.now)))
-                                        
-                                        let activityAttributes = TrainTrackWidgetAttributes(StartStationName: trainDepartures.departures[i].stop.station.name!, EndStationName: trainDepartures.departures[i].to, TrainName: "\(trainDepartures.departures[i].stationboardOperator) \(trainDepartures.departures[i].category) \(trainDepartures.departures[i].name.replacingOccurrences(of: "0", with: ""))")
-                                        
-                                        let activityContent = ActivityContent(state: initialContentState, staleDate: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate) // TODO: maak dit een goede datum
-                                        
-                                        do {
-                                            let trainTrackLiveActivity = try Activity.request(attributes: activityAttributes, content: activityContent)
-                                            print("Requested a train track Live Activity \(String(describing: trainTrackLiveActivity)).")
-                                           } catch (let error) {
-                                               print("Error requesting train track Live Activity \(error.localizedDescription).")
-                                           }
                                     }
+                                    let tnow = Double(Date.now.timeIntervalSince1970)
+                                    let tstart = Double(trainDepartures.departures[i].stop.departureTimestamp!)
+                                    let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970))
+                                    let fracs = (tnow - tstart)/(tend - tstart)
+                                    print("fracs: \(fracs)")
+                                    let updatedTrainStatus = TrainTrackWidgetAttributes.ContentState(fracBegin: fracs, CurrentORArrivingStation: currentORArrivingStation.first?.station.name ?? "Nergens", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now, currentTijd: currentORArrivingStation.first?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation.first?.arrivalDate ?? Date.now) - (currentORArrivingStation.first?.departureDate ?? Date.now)))
+                                    
+                                    let alertConfiguration: AlertConfiguration?
+                                    if Int(Date.now.unix) > trainDepartures.departures[i].stop.arrivalTimestamp! && trainDepartures.departures[i].stop.departureTimestamp! < Int(Date.now.unix) {
+                                        alertConfiguration = AlertConfiguration(title: "Trein vertrekt", body: "De trein van \(trainDepartures.departures[i].stop.departureDate.uurMinTekst) vertrekt nu", sound: .default)
+                                    } else {
+                                        alertConfiguration = nil
+                                        
+                                    }
+                                    
+                                    let updatedContent = ActivityContent(state: updatedTrainStatus, staleDate: nil)
+                                    
+                                    Task {
+                                        await trainDepartures.actis[i]?.update(updatedContent, alertConfiguration: alertConfiguration)
+                                    }
+                                } label: {
+                                    Image(systemName: "arrow.counterclockwise")
                                 }
+                                
+                                Button("GO LIVE") {
+                                    GoLive(i)
+                                }.buttonStyle(.borderedProminent)
                                 Button("Notify") {
-                                    print("Going to Notify")
-                                    let center = UNUserNotificationCenter.current()
-                                    center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-                                        
-                                        if let error = error {
-                                            // Handle the error here.
-                                            print("Er was een error met atuh voor notificaties \(String(describing: error))")
-                                        }
-                                        
-                                        if granted {
-                                            
-                                            let content = UNMutableNotificationContent()
-                                            content.title = "Er is een \(trainDepartures.departures[i].stationboardOperator) \(trainDepartures.departures[i].category) \(trainDepartures.departures[i].name.replacingOccurrences(of: "0", with: ""))"
-                                            content.body = "Die vertrek van Bergün om \(trainDepartures.departures[i].stop.arrivalDate.formatted(date: .omitted, time: .standard))"
-                                            var dateComponents = DateComponents()
-                                            dateComponents.calendar = Calendar.current
-                                            
-                                           // dateComponents.weekday = 3  // Tuesday
-                                            //dateComponents.hour = 14    // 14:00 hours
-                                            dateComponents.minute = Calendar.current.component(.minute, from: Date())+1
-
-                                            
-                                            // Create the trigger as a repeating event.
-                                            let trigger = UNCalendarNotificationTrigger(
-                                                dateMatching: dateComponents, repeats: true)
-                                            print("versturen om \(dateComponents.debugDescription) \(String(describing: dateComponents.second))")
-                                            
-                                            // Create the request
-                                            let uuidString = UUID().uuidString
-                                            let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
-                                            
-                                            
-                                            // Schedule the request with the system.
-                                            let notificationCenter = UNUserNotificationCenter.current()
-                                            notificationCenter.add(request) { (error) in
-                                                if error != nil {
-                                                    // Handle any errors.
-                                                    print("er was een error: \(error.debugDescription)")
-                                                } else {
-                                                    print("notificatie verstuurd")
-                                                }
-                                            }
-                                        }
-                                        
-                                    }
-                                }
+                                    Notify(i)
+                                }.buttonStyle(.borderedProminent)
                                 
                             }
                         }
@@ -110,14 +77,60 @@ struct DepartureBoardTrack: View {
                 }.listStyle(.insetGrouped).listSectionSeparatorTint(.green)
             }
         }
+        .searchable(text: $stationNaam)
+        .searchScopes($trainDepartures.stationSelected) {
+            ForEach(trainDepartures.stationsFound) { scope in
+                Text(scope.name ?? scope.id)
+                    .tag(scope.name)
+            }
+        }
+        .onChange(of: trainDepartures.stationSelected) { scope in
+            Task {
+                print("Getting new departures from serach field met onChange, met naam: \(scope.name ?? "Geen naam") met id: \(scope.id)")
+//                trainDepartures.departures = []
+                await trainDepartures.getDepartures(stationId: Int(scope.id) ?? 8509197)
+                self.stationNaam = scope.name ?? scope.id
+            }
+        }
+        .onSubmit(of: .search, {
+            Task {
+                if Int(stationNaam) != nil {
+                    await trainDepartures.getDepartures(stationId: Int(stationNaam)!)
+                } else {
+                    await trainDepartures.getStations(stations: stationNaam)
+                }
+            }
+        })
+        .navigationBarTitle("Departures", displayMode: .large)
     }
-    
 }
+
+
+
 
 
 
 class TrainDepartures: ObservableObject {
     @Published var departures = [Stationboard]()
+    @Published var stationsFound = [TrainStation]()
+    @Published var actis = [Activity<TrainTrackWidgetAttributes>?]()
+    @Published var stationSelected = TrainStation(berguen: true)
+    
+    var stationSelectedR = TrainStation(berguen: true)
+    var stationSelectedsS: TrainStation {
+        get {
+            return stationSelectedR
+        }
+        set {
+            stationSelectedR = newValue
+            print("Er is een nieuw stations geselcteed \(newValue.name ?? newValue.id)")
+            Task {
+                await getDepartures(stationId: Int(newValue.id) ?? 8509197)
+            }
+        }
+    }
+    
+    
     
     let logger = Logger(
         subsystem: "nl.wittopkoning.traintrack",
@@ -126,9 +139,54 @@ class TrainDepartures: ObservableObject {
     
     init(id: Int) {
         Task {
-            await self.getDepartures(stationId: id)
+            if UserDefaults.standard.string(forKey: "station_id") != nil {
+                if Int(UserDefaults.standard.string(forKey: "station_id")!) == id {
+                    // De instellingen en textbox zijn het zelfde
+                    await self.getDepartures(stationId: id)
+                } else if Int(UserDefaults.standard.string(forKey: "station_id")!) == 8509197 {
+                    // Het is berguen
+                    await self.getDepartures(stationId: 8509197)
+                } else {
+                    // Er is in de intstellingen een ander station ingevuld
+                    self.logger.log("Er is in de intstellingen een ander station ingevuld \(UserDefaults.standard.string(forKey: "station_id")!, privacy: .public)")
+                    await self.getDepartures(stationId: Int(UserDefaults.standard.string(forKey: "station_id")!) ?? 8509197)
+                }
+            } else {
+                await self.getDepartures(stationId: id)
+            }
         }
     }
+    
+    func getStations(stations: String) async {
+        logger.log("Getting station for \(stations, privacy: .public)")
+        let stationURL = URL(string: "https://transport.opendata.ch/v1/locations?query=\(stations)")!
+        
+        var (ds, responseTrain) = (Data(), URLResponse())
+        
+        do {
+            (ds, responseTrain) = try await URLSession.shared.data(from: stationURL)
+            let decodedLists = try JSONDecoder().decode(TrainStations.self, from: ds)
+            self.logger.log("The response of the train stations is good")
+            
+            let filteredStations = decodedLists.stations.filter { station in
+                return station.icon == "train"
+            }
+            
+            DispatchQueue.main.async {
+                self.stationsFound = filteredStations
+            }
+        } catch {
+            if let response = responseTrain as? HTTPURLResponse {
+                self.logger.fault("[ERROR] Er was een probleem met het laden een url: \(stationURL.absoluteString, privacy: .public) en met response: \(response, privacy: .public) Met de error: \(String(describing: error), privacy: .public) met data: \n \(String(decoding: ds, as: UTF8.self), privacy: .public)")
+                
+            } else {
+                self.logger.fault("[ERROR] Er was een terwijl de json werd geparsed: \(stationURL.absoluteString, privacy: .public) met data \(String(decoding: ds, as: UTF8.self), privacy: .public) Met de error: \(String(describing: error), privacy: .public)")
+                
+            }
+        }
+        // self.stationsFound = [TrainStation(id: "8509197", name: "Berguen", score: nil, coordinate: Coordinate(type: .wgs84, x: 46.603, y: 9.473), distance: nil)]
+    }
+    
     
     func getDepartures(stationId: Int) async {
         logger.log("Getting departures from \(stationId, privacy: .public)")
@@ -141,7 +199,12 @@ class TrainDepartures: ObservableObject {
             let ds = String(data: d, encoding: .utf8)?.replacingOccurrences(of: "\\u00fc\\", with: "u")
             let decodedLists = try JSONDecoder().decode(TrainDepartureBoard.self, from: Data(ds!.utf8))
             self.logger.log("The response of the trains is good")
-            self.departures = decodedLists.stationboard
+            DispatchQueue.main.async {
+                self.departures = decodedLists.stationboard
+                for _ in 0...decodedLists.stationboard.count {
+                    self.actis.append(nil)
+                }
+            }
         } catch {
             if let response = responseTrain as? HTTPURLResponse {
                 self.logger.fault("[ERROR] Er was een probleem met het laden een url: \(stationURL.absoluteString, privacy: .public) en met response: \(response, privacy: .public) Met de error: \(String(describing: error), privacy: .public) met data: \n \(String(decoding: d, as: UTF8.self), privacy: .public)")
