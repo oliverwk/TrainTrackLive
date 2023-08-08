@@ -113,14 +113,37 @@ struct TrainTrackWidgetLiveActivity: Widget {
                 // Expanded UI goes here.  Compose the expanded UI through
                 // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
-                    Text("Leading")
+                    Text("+\(context.state.delay ?? 0)m")
+                        .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
+                        .font(.callout)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text("Trailing")
+                    Text("\(context.state.aankomstTijd.uurMinTekst) ")
+                        .fontWeight(.heavy)
+                        .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
+                        .font(.body)
+                    Text("\(context.attributes.EndStationName)").fontWeight(.heavy).font(.body).foregroundColor(.black)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Text("Bottom")
-                    // more content
+                    GeometryReader { geometry in
+                        HStack {
+                            ZStack(alignment: .leading) {
+                                Rectangle().frame(width: geometry.size.width , height: 15)
+                                    .opacity(0.4)
+                                    .foregroundColor(.green)
+                                    .cornerRadius(45.0)
+                                withAnimation {
+                                    Rectangle().frame(width: min(CGFloat(context.state.fracBegin)*geometry.size.width, geometry.size.width), height: 15)
+                                        .foregroundColor(.green)
+                                }.cornerRadius(45.0)
+                                
+                                Circle()
+                                    .frame(width: 20, height: 20)
+                                    .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
+                                    .position(CGPoint(x: CGFloat(context.state.fracBegin)*geometry.size.width, y: 7))
+                            }
+                        }
+                    }
                 }
             } compactLeading: {
                 Text("\(context.attributes.EndStationName)").foregroundColor(.red).padding(.leading)
@@ -147,7 +170,7 @@ struct TrainTrackWidgetLiveActivity: Widget {
                 }
             }
             .widgetURL(URL(string: "https://www.apple.com"))
-            .keylineTint(Color.red)
+            .keylineTint((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
         }
     }
 }

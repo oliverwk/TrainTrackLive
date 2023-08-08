@@ -57,55 +57,55 @@ extension DepartureBoardTrack {
     }
     
     func Notify(_ i: Int) -> Void
-        {
-            print("Going to Notify")
-            let center = UNUserNotificationCenter.current()
-            center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+    {
+        print("Going to Notify")
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            
+            if let error = error {
+                // Handle the error here.
+                print("Er was een error met auth voor notificaties \(String(describing: error))")
+            }
+            
+            if granted {
                 
-                if let error = error {
-                    // Handle the error here.
-                    print("Er was een error met auth voor notificaties \(String(describing: error))")
-                }
+                let content = UNMutableNotificationContent()
+                content.title = "Er is een \(trainDepartures.departures[i].stationboardOperator) \(trainDepartures.departures[i].category) \(trainDepartures.departures[i].name.replacingOccurrences(of: "0", with: ""))"
+                content.body = "Die vertrek van Bergün om \(trainDepartures.departures[i].stop.arrivalDate.formatted(date: .omitted, time: .standard))"
+                var dateComponents = DateComponents()
+                dateComponents.calendar = Calendar.current
                 
-                if granted {
-                    
-                    let content = UNMutableNotificationContent()
-                    content.title = "Er is een \(trainDepartures.departures[i].stationboardOperator) \(trainDepartures.departures[i].category) \(trainDepartures.departures[i].name.replacingOccurrences(of: "0", with: ""))"
-                    content.body = "Die vertrek van Bergün om \(trainDepartures.departures[i].stop.arrivalDate.formatted(date: .omitted, time: .standard))"
-                    var dateComponents = DateComponents()
-                    dateComponents.calendar = Calendar.current
-                    
-                    // dateComponents.weekday = 3  // Tuesday
-                    //dateComponents.hour = 14    // 14:00 hours
-                    dateComponents.minute = Calendar.current.component(.minute, from: Date())+1
-                    
-                    
-                    // Create the trigger as a repeating event.
-                    let trigger = UNCalendarNotificationTrigger(
-                        dateMatching: dateComponents, repeats: false)
-                    print("versturen om \(dateComponents.debugDescription) \(String(describing: dateComponents.second))")
-                    
-                    // Create the request
-                    let uuidString = UUID().uuidString
-                    let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
-                    
-                    
-                    // Schedule the request with the system.
-                    let notificationCenter = UNUserNotificationCenter.current()
-                    if false {
-                        notificationCenter.add(request) { (error) in
-                            if error != nil {
-                                // Handle any errors.
-                                print("er was een error: \(error.debugDescription)")
-                            } else {
-                                print("notificatie verstuurd")
-                            }
-                        }
+                // dateComponents.weekday = 3  // Tuesday
+                //dateComponents.hour = 14    // 14:00 hours
+                dateComponents.minute = Calendar.current.component(.minute, from: Date())+1
+                
+                dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: trainDepartures.departures[i].stop.departureDate)
+                
+                // Create the trigger as a repeating event.
+                let trigger = UNCalendarNotificationTrigger(
+                    dateMatching: dateComponents, repeats: false)
+                print("versturen om \(dateComponents.debugDescription) \(String(describing: dateComponents.second))")
+                
+                // Create the request
+                let uuidString = UUID().uuidString
+                let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
+                
+                
+                // Schedule the request with the system.
+                let notificationCenter = UNUserNotificationCenter.current()
+                notificationCenter.add(request) { (error) in
+                    if error != nil {
+                        // Handle any errors.
+                        print("er was een error: \(error.debugDescription)")
+                    } else {
+                        print("notificatie verstuurd")
                     }
                 }
                 
             }
+            
         }
+    }
     
 }
 
