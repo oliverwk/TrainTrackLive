@@ -28,6 +28,8 @@
 		E6BF0A252A771027006816FE /* TrainUpdateStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A242A771027006816FE /* TrainUpdateStruct.swift */; };
 		E6BF0A272A7710AA006816FE /* LocationTrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A262A7710AA006816FE /* LocationTrain.swift */; };
 		E6BF0A292A7710CE006816FE /* TrainWebsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */; };
+		E6C9C8B02A82D30100F8402A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E6C9C8AF2A82D30100F8402A /* Settings.bundle */; };
+		E6C9C8B22A82DEA200F8402A /* DepartureBoardTrackExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C9C8B12A82DEA200F8402A /* DepartureBoardTrackExtended.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +79,8 @@
 		E6BF0A242A771027006816FE /* TrainUpdateStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainUpdateStruct.swift; sourceTree = "<group>"; };
 		E6BF0A262A7710AA006816FE /* LocationTrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTrain.swift; sourceTree = "<group>"; };
 		E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainWebsocket.swift; sourceTree = "<group>"; };
+		E6C9C8AF2A82D30100F8402A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		E6C9C8B12A82DEA200F8402A /* DepartureBoardTrackExtended.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureBoardTrackExtended.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +127,7 @@
 		E6BF0A052A770FF2006816FE = {
 			isa = PBXGroup;
 			children = (
+				E6C9C8AF2A82D30100F8402A /* Settings.bundle */,
 				E6BF0A102A770FF2006816FE /* TrainTrackLive */,
 				E634D3352A7EF0A9004B877E /* TrainTrackWidget */,
 				E634D3302A7EF0A9004B877E /* Frameworks */,
@@ -150,6 +155,7 @@
 				E6BF0A262A7710AA006816FE /* LocationTrain.swift */,
 				E6BF0A242A771027006816FE /* TrainUpdateStruct.swift */,
 				E653C9762A7E3BAC0007596E /* DepartureBoardTrack.swift */,
+				E6C9C8B12A82DEA200F8402A /* DepartureBoardTrackExtended.swift */,
 				E653C9782A7E40300007596E /* TrainDepartureBoard.swift */,
 				E6BF0A202A771009006816FE /* Helper.swift */,
 				E6BF0A152A770FF4006816FE /* Assets.xcassets */,
@@ -257,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6BF0A1A2A770FF4006816FE /* Preview Assets.xcassets in Resources */,
+				E6C9C8B02A82D30100F8402A /* Settings.bundle in Resources */,
 				E6BF0A162A770FF4006816FE /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,6 +296,7 @@
 				E6BF0A122A770FF2006816FE /* TrainTrackLiveApp.swift in Sources */,
 				E653C9772A7E3BAC0007596E /* DepartureBoardTrack.swift in Sources */,
 				E6BF0A212A771009006816FE /* Helper.swift in Sources */,
+				E6C9C8B22A82DEA200F8402A /* DepartureBoardTrackExtended.swift in Sources */,
 				E6BF0A272A7710AA006816FE /* LocationTrain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
