@@ -12,7 +12,7 @@ import SwiftUI
 struct TrainTrackWidgetAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
         // Dynamic stateful properties about your activity go here!
-        var frac: Double
+        var fracBegin: Double
         var CurrentORArrivingStation: String
         var delay: Int?
         var eindSpoor: String
@@ -38,9 +38,9 @@ struct TrainTrackWidgetLiveActivity: Widget {
                         Text("\(context.attributes.TrainName)").foregroundColor(.black)
                         Spacer()
                         if context.state.tijdCurrentSpenderen > 0 {
-                            Text("\(context.state.tijdCurrentSpenderen) min hier").foregroundColor(.blue).foregroundColor(.black)
+                            Text("\(context.state.tijdCurrentSpenderen.difInHour) min hier").foregroundColor(.blue).foregroundColor(.black)
                         } else {
-                            Text("\((Date.now.timeIntervalSince1970-context.state.aankomstTijd.timeIntervalSince1970).difInSec)").foregroundColor(.black)
+                            Text("\((context.state.aankomstTijd.timeIntervalSince1970-Date.now.timeIntervalSince1970).difInHour)").foregroundColor(.black)
                         }
                        
                         Spacer()
@@ -48,12 +48,12 @@ struct TrainTrackWidgetLiveActivity: Widget {
                     }.padding(.bottom, 5)
                     HStack {
                         Text("\(context.attributes.StartStationName.contains("/") ? String(context.attributes.StartStationName.split(separator: "/")[0]) : context.attributes.StartStationName)").fontWeight(.heavy).font(.body).foregroundColor(.black)
-                        Text(" \(context.state.vertrekTijd.formatted(date: .omitted, time: .standard))")
+                        Text(" \(context.state.vertrekTijd.uurMinTekst)")
                             .fontWeight(.heavy)
                             .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
                             .font(.body)
                         Spacer()
-                        Text("\(context.state.aankomstTijd.formatted(date: .omitted, time: .shortened)) ")
+                        Text("\(context.state.aankomstTijd.uurMinTekst) ")
                             .fontWeight(.heavy)
                             .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
                             .font(.body)
@@ -69,24 +69,24 @@ struct TrainTrackWidgetLiveActivity: Widget {
                                 .foregroundColor(.green)
                                 .cornerRadius(45.0)
                             withAnimation {
-                                Rectangle().frame(width: min(CGFloat(context.state.frac)*geometry.size.width, geometry.size.width), height: 15)
+                                Rectangle().frame(width: min(CGFloat(context.state.fracBegin)*geometry.size.width, geometry.size.width), height: 15)
                                     .foregroundColor(.green)
                             }.cornerRadius(45.0)
                             
                             Circle()
                                 .frame(width: 20, height: 20)
                                 .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
-                                .position(CGPoint(x: CGFloat(context.state.frac)*geometry.size.width, y: 7))
+                                .position(CGPoint(x: CGFloat(context.state.fracBegin)*geometry.size.width, y: 7))
                         }
                     }
                 }
                 
                 HStack {
                     Text((context.state.delay ?? 0) > 0 ? "delayed" : "on time")
-                        .foregroundColor(.green)
+                        .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
                         .font(.callout)
                     Spacer()
-                    Text("\(context.state.currentTijd.formatted(date: .omitted, time: .shortened)) ")
+                    Text("\(context.state.currentTijd.uurMinTekst) ")
                         .fontWeight(.heavy)
                         .foregroundColor((context.state.delay ?? 0) > 0 ? Color.orange : Color.green)
                         .font(.headline)
@@ -95,9 +95,12 @@ struct TrainTrackWidgetLiveActivity: Widget {
                         .font(.headline)
                         .foregroundColor(.black)
                     Spacer()
-                    Text("+\(context.state.delay ?? 0)m")
-                        .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
-                        .font(.callout)
+                    if context.state.delay ?? 0 > 0 {
+                        Text("+\(context.state.delay ?? 0)m")
+                            .foregroundColor((context.state.delay ?? 0) > 0 ? Color.red : Color.green)
+                            .font(.callout)
+                    }
+                  
                 }
             }.padding()
                 .activityBackgroundTint(.white)
@@ -131,7 +134,7 @@ struct TrainTrackWidgetLiveActivity: Widget {
                                 .frame(width: 25, height: 25)
                     
                             Circle()
-                                .trim(from: 0, to: CGFloat(context.state.frac))
+                                .trim(from: 0, to: CGFloat(context.state.fracBegin))
                                 .stroke(
                                     context.state.delay == 0 ? .green : .orange,
                                     lineWidth: 3
@@ -149,7 +152,7 @@ struct TrainTrackWidgetLiveActivity: Widget {
 
 struct TrainTrackWidgetLiveActivity_Previews: PreviewProvider {
     static let attributes = TrainTrackWidgetAttributes(StartStationName: "Berguen", EndStationName: "St. Moritzz", TrainName: "IR 6745")
-    static let contentState = TrainTrackWidgetAttributes.ContentState(frac: 0.8, CurrentORArrivingStation: "Preda", delay: 3, eindSpoor: "Pl. 2A", aankomstTijd: Date(timeIntervalSince1970: Date.now.timeIntervalSince1970-1300), vertrekTijd: Date(timeIntervalSince1970: Date.now.timeIntervalSince1970+1500), currentTijd: Date.now, tijdCurrentSpenderen: 0.0)
+    static let contentState = TrainTrackWidgetAttributes.ContentState(fracBegin: 0.8, CurrentORArrivingStation: "Preda", delay: 3, eindSpoor: "Pl. 2A", aankomstTijd: Date(timeIntervalSince1970: Date.now.timeIntervalSince1970-1300), vertrekTijd: Date(timeIntervalSince1970: Date.now.timeIntervalSince1970+1500), currentTijd: Date.now, tijdCurrentSpenderen: 0.0)
     
     static var previews: some View {
         attributes

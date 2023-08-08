@@ -88,6 +88,17 @@ extension Date {
         return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
     }
 
+    var uurMinTekst: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh:mm"
+        dateFormatter.locale = Locale(identifier: "nl_NL")
+        let formattedDate = dateFormatter.string(from: self)
+        return formattedDate
+    }
+    
+    var unix: Double {
+        self.timeIntervalSince1970
+    }
 }
 
 extension TimeInterval {
@@ -95,6 +106,18 @@ extension TimeInterval {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second]
         formatter.unitsStyle = .brief
+        formatter.calendar?.locale = .current
+
+        let formattedString = formatter.string(from: TimeInterval(self))!
+        return formattedString
+    }
+    
+    var difInHour: String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.unitsStyle = .brief
+        formatter.calendar?.locale = .current
+
 
         let formattedString = formatter.string(from: TimeInterval(self))!
         return formattedString
