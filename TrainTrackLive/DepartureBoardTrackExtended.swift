@@ -77,7 +77,7 @@ extension DepartureBoardTrack {
                 
                 // dateComponents.weekday = 3  // Tuesday
                 //dateComponents.hour = 14    // 14:00 hours
-                dateComponents.minute = Calendar.current.component(.minute, from: Date())+1
+               // dateComponents.minute = Calendar.current.component(.minute, from: Date())+1
                 
                 dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: trainDepartures.departures[i].stop.departureDate)
                 

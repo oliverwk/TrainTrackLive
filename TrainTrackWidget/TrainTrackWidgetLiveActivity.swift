@@ -44,7 +44,7 @@ struct TrainTrackWidgetLiveActivity: Widget {
                         }
                        
                         Spacer()
-                        Text("  \(context.state.eindSpoor)").foregroundColor(.black)
+                        Text("    \(context.state.eindSpoor)").foregroundColor(.black)
                     }.padding(.bottom, 5)
                     HStack {
                         Text("\(context.attributes.StartStationName.contains("/") ? String(context.attributes.StartStationName.split(separator: "/")[0]) : context.attributes.StartStationName)").fontWeight(.heavy).font(.body).foregroundColor(.black)

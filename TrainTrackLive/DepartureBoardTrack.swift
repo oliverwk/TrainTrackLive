@@ -28,6 +28,7 @@ struct DepartureBoardTrack: View {
                                 Text("\(trainDepartures.departures[i].stop.departureDate.formatted(date: .omitted, time: .shortened)) --> \(trainDepartures.departures[i].to)")
                                 Spacer()
                                 Button {
+                                    // Dit is de reloading knop
                                     var currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
                                         if stop.station.name != nil {
                                             if (Date.now.timeIntervalSince1970 > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.timeIntervalSince1970) {
@@ -55,9 +56,9 @@ struct DepartureBoardTrack: View {
                                     let tstart = Double(trainDepartures.departures[i].stop.departureTimestamp!)
                                     let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970))
                                     let fracs = (tnow - tstart)/(tend - tstart)
-                                    print("fracs: \(fracs)")
+                                    print("fracs: \(fracs) from updating")
                                     let updatedTrainStatus = TrainTrackWidgetAttributes.ContentState(fracBegin: fracs, CurrentORArrivingStation: currentORArrivingStation?.station.name ?? "Nergens", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now, currentTijd: currentORArrivingStation?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation?.arrivalDate ?? Date.now) - (currentORArrivingStation?.departureDate ?? Date.now)))
-                                    
+                                    print("deps: \(trainDepartures.departures[i])")
                                     let alertConfiguration: AlertConfiguration?
                                     if Int(Date.now.unix) >= trainDepartures.departures[i].stop.arrivalTimestamp ?? Date.now.unix.int && trainDepartures.departures[i].stop.departureTimestamp ?? Date.now.unix.int <= Int(Date.now.unix) {
                                         alertConfiguration = AlertConfiguration(title: "Trein vertrekt", body: "De trein van \(trainDepartures.departures[i].stop.departureDate.uurMinTekst) vertrekt nu", sound: .default)
@@ -78,10 +79,9 @@ struct DepartureBoardTrack: View {
                                 Button("GO LIVE") {
                                     GoLive(i)
                                 }.buttonStyle(.borderedProminent)
-                                Button("Notify") {
+                                /*Button("Notify") {
                                     Notify(i)
-                                }.buttonStyle(.borderedProminent)
-                                
+                                }.buttonStyle(.borderedProminent)*/
                             }
                         }
                     }
@@ -92,7 +92,7 @@ struct DepartureBoardTrack: View {
         .searchScopes($trainDepartures.stationSelected) {
             ForEach(trainDepartures.stationsFound) { scope in
                 Text(scope.name ?? scope.id)
-                    .tag(scope.name)
+                    .tag(scope)
             }
         }
         .onChange(of: trainDepartures.stationSelected) { scope in
@@ -123,25 +123,9 @@ struct DepartureBoardTrack: View {
 
 class TrainDepartures: ObservableObject {
     @Published var departures = [Stationboard]()
-    @Published var stationsFound = [TrainStation]()
     @Published var actis = [Activity<TrainTrackWidgetAttributes>?]()
+    @Published var stationsFound = [TrainStation]()
     @Published var stationSelected = TrainStation(berguen: true)
-    
-    var stationSelectedR = TrainStation(berguen: true)
-    var stationSelectedsS: TrainStation {
-        get {
-            return stationSelectedR
-        }
-        set {
-            stationSelectedR = newValue
-            print("Er is een nieuw stations geselcteed \(newValue.name ?? newValue.id)")
-            Task {
-                await getDepartures(stationId: Int(newValue.id) ?? 8509197)
-            }
-        }
-    }
-    
-    
     
     let logger = Logger(
         subsystem: "nl.wittopkoning.traintrack",

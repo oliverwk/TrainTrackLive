@@ -90,7 +90,7 @@ extension Date {
 
     var uurMinTekst: String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "hh:mm"
+        dateFormatter.dateFormat = "HH:mm"
         dateFormatter.locale = Locale(identifier: "nl_NL")
         let formattedDate = dateFormatter.string(from: self)
         return formattedDate
