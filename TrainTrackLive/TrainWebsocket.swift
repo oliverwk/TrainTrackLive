@@ -45,6 +45,7 @@ class TrainWebsocket: ObservableObject {
         // boundbox = "819862.6976440828 5929181.685732176 843405.3023559172 5938736.3142678235"; // Dit is Bern
         // boundbox = "1075401.940808419 5866728.345598243 1095724.427047632 5896720.6813848780"; // Dit is berguen
         //boundbox = "\(epsg4326toEpsg3857([(mapRegion.center.longitude-0.2), (mapRegion.center.latitude-0.2)]))";
+        // TODO: Maak dit met de locatie mee volgen
         boundbox = "1011017.444807091 5850052.447254116 1156809.715192909 5934664.0327458850"; // Dit is berguen met omgeving
         sendMessage("BBOX \(boundbox) 13 gen=100 mots=subway,rail,ferry,cablecar,gondola,funicular")
         receiveMessage()
@@ -53,6 +54,39 @@ class TrainWebsocket: ObservableObject {
     }
     
     func probeerIets() throws -> Bool { return true }
+    
+    func getStopsTrains(_ id: String) async -> TrainStopContent? {
+        let msg = "GET stopsequence_\(id)"
+        logger.log("sending msg to the server via websocket: \(msg)")
+        
+        do {
+            try await webSocketTask?.send(.string(msg))
+            let messageStop = try await webSocketTask?.receive()
+            switch messageStop {
+            case let .string(trainStops):
+                logger.log("Got the data form the stops: \(trainStops)")
+                self.messages.append(trainStops)
+                let data = Data(trainStops.utf8)
+                logger.log("data: \(data.debugDescription)")
+                let trainStopsJson = try JSONDecoder().decode(TrainStopUpdate.self, from: data)
+                return trainStopsJson.content[0]
+            case let .data(data):
+                logger.log("We got data which isn't expected \(data.debugDescription)")
+                return nil
+            case .none:
+                logger.error("We didn't get any messages")
+                return nil
+            @unknown default:
+                logger.log("unkown message received")
+                return nil
+            }
+        } catch {
+            self.logger.error("We got an error with send \(msg) to the weboscket server or with the receiving met error \(String(describing: error))")
+            return nil
+            
+        }
+        
+    }
     
     func receiveMessage() {
         webSocketTask?.receive { result in
@@ -64,8 +98,6 @@ class TrainWebsocket: ObservableObject {
                 case .string(let text):
                     self.messages.append(text)
                     // JSON parse
-                    let geoJson = [MKGeoJSONObject]()
-                    var overlays = [MKOverlay]()
                     let trainUpdate: TrainUpdate?
                     do {
                         let data = text.data(using: .utf8)!
@@ -125,7 +157,7 @@ class TrainWebsocket: ObservableObject {
                                         }
                                     }
                                 }
-
+                                
                                 
                                 /*let testline = MKPolyline(coordinates: testcoords, count: testcoords.count)
                                  for each in 0..<testcoords.count{
@@ -137,27 +169,6 @@ class TrainWebsocket: ObservableObject {
                             }
                         }
                     }
-                    
-                    for item in geoJson {
-                        if let feature = item as? MKGeoJSONFeature {
-                            let propData = feature.properties!
-                            
-                            //  self.logger.info("\(feature.identifier?.debugDescription)")
-                            self.logger.info("\(feature.geometry.debugDescription)")
-                            self.logger.info("\(propData.debugDescription)")
-                            for geo in feature.geometry {
-                                if let polygon = geo as? MKPolygon {
-                                    overlays.append(polygon)
-                                }
-                                if let PolyLine = geo as? MKPolyline {
-                                    overlays.append(PolyLine)
-                                }
-                            }
-                            
-                            // Dit is de geojson porp: LineString
-                        }
-                    }
-                    
                     
                 case .data(let data):
                     // Handle binary data

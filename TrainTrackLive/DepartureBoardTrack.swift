@@ -15,7 +15,7 @@ import os
 // het id van berugen is 8509197
 
 struct DepartureBoardTrack: View {
-    @State private var stationNaam = "8509197"
+    @State private var stationNaam = "Bergün"
     @ObservedObject var trainDepartures = TrainDepartures(id: 8509197)
     
     var body: some View {

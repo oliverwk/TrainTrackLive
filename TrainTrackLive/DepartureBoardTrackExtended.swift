@@ -44,7 +44,7 @@ extension DepartureBoardTrack {
             
             let activityAttributes = TrainTrackWidgetAttributes(StartStationName: trainDepartures.departures[i].stop.station.name!, EndStationName: trainDepartures.departures[i].to, TrainName: "\(trainDepartures.departures[i].stationboardOperator) \(trainDepartures.departures[i].category) \(trainDepartures.departures[i].name.replacingOccurrences(of: "0", with: ""))")
             
-            let activityContent = ActivityContent(state: initialContentState, staleDate: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate) // TODO: maak dit een goede datum om te eindgen
+            let activityContent = ActivityContent(state: initialContentState, staleDate: trainDepartures.departures[i].passList.first?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate) // TODO: maak dit een goede datum om te eindgen
             
             do {
                 let trainTrackLiveActivity = try Activity.request(attributes: activityAttributes, content: activityContent)

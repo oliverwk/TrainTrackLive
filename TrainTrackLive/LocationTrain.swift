@@ -37,10 +37,15 @@ struct LocationTrain: Identifiable {
         let frac = ((tnow - tstart)+1)/(tend - tstart)
         print(" \(tnow - tstart) / \(tend - tstart)")
         print("frac: \(frac) and count: \(coordinates.count)")
-        let index = (frac * Float(coordinates.count)) - 1
+        var index = (frac * Float(coordinates.count)) - 1
         
         // let index = Float(coordinatesMap.count/2)
         print("the mid cord index: \(index)")
+        if index.isInfinite {
+            index = 0
+        } else if index > Float(coordinates.count) {
+            index = Float(coordinates.count - 1)
+        }
         print("the mid cord index: \(coordinatesMap[Int(index)])")
         return coordinatesMap[Int(index)]
     }

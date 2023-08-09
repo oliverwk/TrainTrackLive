@@ -21,17 +21,15 @@ struct KaartTrain: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Image(systemName: "train.side.front.car")
-                    .imageScale(.large)
-                    .foregroundColor(.accentColor)
-                    .scaleEffect(x: -1, y: 1)
-                Text(trainName)
+            VStack {
+                if trainName != "All aboard" {
+                    Text(trainName)
+                }
                 Button {
                     websocket.receiveMessage()
                 } label: {
                     Text("Reload")
-                }
+                }.buttonStyle(.bordered)
             }.padding()
             Map(coordinateRegion: $mapRegion, annotationItems: websocket.locations) { location in
                 MapAnnotation(coordinate: location.middleCoordinatesMap) {
@@ -39,7 +37,10 @@ struct KaartTrain: View {
                         .stroke(.red, lineWidth: 5)
                         .frame(width: 10, height: 10)
                         .onTapGesture {
-                            self.trainName = "\(location.name)\n from \(location.opData.content.properties.line.name)"
+                            Task {
+                                let stops = await websocket.getStopsTrains(location.id)
+                                self.trainName = "\(stops?.longName ?? "Trein") from \(stops?.stations.first?.stationName ?? stops?.stations[0].stationName ?? "station-1") to \(stops?.destination ?? "station-2")"
+                            }
                             logger.log("Tapped on \(location.name, privacy: .public)")
                             logger.log("Cords real \(location.coordinatesMap, privacy: .public)")
                             logger.log("mapRegion: \(mapRegion.center.longitude, privacy: .public)")
@@ -47,6 +48,9 @@ struct KaartTrain: View {
                 }
                 
             }.ignoresSafeArea(.container)
+                .onAppear {
+                    websocket.receiveMessage()
+                }
         }
     }
 }
