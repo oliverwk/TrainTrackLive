@@ -50,14 +50,14 @@ struct TrainStation: Codable, Identifiable, CustomStringConvertible, Hashable, E
         return lhs.description == rhs.description
     }
     
-    let id: String
+    let id: String?
     let name: String?
     let score: String?
     let coordinate: Coordinate
     let distance: String?
     let icon: String?
     var description: String {
-        return "id: \(id), name: \(String(describing: name)), score: \(String(describing: score)), coordinate \(coordinate.swiftCoordinate), distance: \(String(describing: distance))"
+        return "id: \(String(describing: id)), name: \(String(describing: name)), score: \(String(describing: score)), coordinate \(coordinate.swiftCoordinate), distance: \(String(describing: distance))"
     }
 }
 
@@ -75,7 +75,7 @@ enum TypeEnum: String, Codable {
 }
 
 // MARK: - Stationboard
-struct Stationboard: Codable, Identifiable {
+struct Stationboard: Codable, Identifiable, CustomStringConvertible {
     let id = UUID()
     let stop: Stop
     let name, category: String
@@ -83,8 +83,11 @@ struct Stationboard: Codable, Identifiable {
     let number, stationboardOperator, to: String
     let passList: [PassList]
     let capacity1St, capacity2Nd: String?
-    let tapped = false
-   
+    
+    var description: String {
+        return "stop: \(stop), name: \(name), category: \(category), subcategory: \(String(describing: subcategory)), categoryCode: \(String(describing: categoryCode)), number: \(number), stationboardOperator: \(stationboardOperator), to: \(to), passList: \(passList), capacity1St: \(String(describing: capacity1St)), capacity2Nd: \(String(describing: capacity2Nd))"
+    }
+    
     enum CodingKeys: String, CodingKey {
         case stop, name, category, subcategory, categoryCode, number
         case stationboardOperator = "operator"

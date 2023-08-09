@@ -15,8 +15,14 @@ import os
 // het id van berugen is 8509197
 
 struct DepartureBoardTrack: View {
+    @State private var buttonColour: Color = .accentColor
     @State private var stationNaam = "Bergün"
     @ObservedObject var trainDepartures = TrainDepartures(id: 8509197)
+    
+    let logger = Logger(
+        subsystem: "nl.wittopkoning.traintrack",
+        category: "DepartureBoardTrack"
+    )
     
     var body: some View {
         NavigationView {
@@ -28,60 +34,24 @@ struct DepartureBoardTrack: View {
                                 Text("\(trainDepartures.departures[i].stop.departureDate.formatted(date: .omitted, time: .shortened)) --> \(trainDepartures.departures[i].to)")
                                 Spacer()
                                 Button {
-                                    // Dit is de reloading knop
-                                    var currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
-                                        if stop.station.name != nil {
-                                            if (Date.now.timeIntervalSince1970 > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.timeIntervalSince1970) {
-                                                // De trein is hier nog niet geweest
-                                                return true
-                                            } else {
-                                                return false
-                                            }
-                                        } else {
-                                            return false
-                                        }
-                                    }.first
-                                    
-                                    if currentORArrivingStation == nil {
-                                        currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
-                                            if stop.station.name != nil {
-                                                return true
-                                            } else {
-                                                return false
-                                            }
-                                        }.first
-                                    }
-                                    
-                                    let tnow = Double(Date.now.timeIntervalSince1970)
-                                    let tstart = Double(trainDepartures.departures[i].stop.departureTimestamp!)
-                                    let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970))
-                                    let fracs = (tnow - tstart)/(tend - tstart)
-                                    print("fracs: \(fracs) from updating")
-                                    let updatedTrainStatus = TrainTrackWidgetAttributes.ContentState(fracBegin: fracs, CurrentORArrivingStation: currentORArrivingStation?.station.name ?? "Nergens", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now, currentTijd: currentORArrivingStation?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation?.arrivalDate ?? Date.now) - (currentORArrivingStation?.departureDate ?? Date.now)))
-                                    print("deps: \(trainDepartures.departures[i])")
-                                    let alertConfiguration: AlertConfiguration?
-                                    if Int(Date.now.unix) >= trainDepartures.departures[i].stop.arrivalTimestamp ?? Date.now.unix.int && trainDepartures.departures[i].stop.departureTimestamp ?? Date.now.unix.int <= Int(Date.now.unix) {
-                                        alertConfiguration = AlertConfiguration(title: "Trein vertrekt", body: "De trein van \(trainDepartures.departures[i].stop.departureDate.uurMinTekst) vertrekt nu", sound: .default)
-                                    } else {
-                                        alertConfiguration = nil
-                                        
-                                    }
-                                    
-                                    let updatedContent = ActivityContent(state: updatedTrainStatus, staleDate: nil)
-                                    
-                                    Task {
-                                        await trainDepartures.actis[i]?.update(updatedContent, alertConfiguration: alertConfiguration)
-                                    }
+                                    buttonColour = .green
+                                    Task { await GoUpdate(i) }
+                                    buttonColour = .accentColor
                                 } label: {
                                     Image(systemName: "arrow.counterclockwise")
+                                        .foregroundColor(buttonColour)
+                                        
                                 }
                                 
                                 Button("GO LIVE") {
-                                    GoLive(i)
+                                    Task {
+                                        await GoLive(i)
+                                        await GoUpdate(i)
+                                    }
                                 }.buttonStyle(.borderedProminent)
-                                /*Button("Notify") {
+                                Button("Notify") {
                                     Notify(i)
-                                }.buttonStyle(.borderedProminent)*/
+                                }.buttonStyle(.bordered)
                             }
                         }
                     }
@@ -91,16 +61,15 @@ struct DepartureBoardTrack: View {
         .searchable(text: $stationNaam)
         .searchScopes($trainDepartures.stationSelected) {
             ForEach(trainDepartures.stationsFound) { scope in
-                Text(scope.name ?? scope.id)
+                Text((scope.name ?? scope.id)!)
                     .tag(scope)
             }
         }
         .onChange(of: trainDepartures.stationSelected) { scope in
-            print("Getting new departures from serach field met onChange, met naam: \(scope.name ?? "Geen naam") met id: \(scope.id)")
+            logger.log("Getting new departures from serach field met onChange, met naam: \(scope.name ?? "Geen naam") met id: \(scope.id ?? "geen id")")
             Task {
-//                trainDepartures.departures = []
-                await trainDepartures.getDepartures(stationId: Int(scope.id) ?? 8509197)
-                self.stationNaam = scope.name ?? scope.id
+                await trainDepartures.getDepartures(stationId: Int(scope.id ?? "8509197") ?? 8509197)
+                self.stationNaam = scope.name ?? scope.id!
             }
         }
         .onSubmit(of: .search, {
@@ -153,7 +122,7 @@ class TrainDepartures: ObservableObject {
     }
     
     func getStations(stations: String) async {
-        logger.log("Getting station for \(stations, privacy: .public)")
+        logger.log("Getting stations for \"\(stations, privacy: .public)\"")
         let stationURL = URL(string: "https://transport.opendata.ch/v1/locations?query=\(stations)")!
         
         var (ds, responseTrain) = (Data(), URLResponse())
