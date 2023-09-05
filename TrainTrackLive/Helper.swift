@@ -150,3 +150,7 @@ extension Data {
         return prettyPrintedString
     }
 }
+
+let ALBULA_TUNNEL = """
+{"state":"PENDING","formation_id":null,"arrivalDelay":null,"arrivalTime":null,"aimedArrivalTime":null,"cancelled":false,"departureDelay":null,"departureTime":null,"aimedDepartureTime":null,"noDropOff":true,"noPickUp":true,"stationId":null,"stationName":"Albulatunnel","coordinate":[1092194,5872816],"platform":null},
+"""

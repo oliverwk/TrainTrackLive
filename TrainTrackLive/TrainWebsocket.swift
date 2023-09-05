@@ -64,11 +64,15 @@ class TrainWebsocket: ObservableObject {
             let messageStop = try await webSocketTask?.receive()
             switch messageStop {
             case let .string(trainStops):
-                logger.log("Got the data form the stops: \(trainStops.prettyJSON)")
+//                logger.log("Got the data form the stops: \(trainStops.prettyJSON)")
                 self.messages.append(trainStops)
-                let data = Data(trainStops.utf8)
+                let trainStopss = trainStops.replacingOccurrences(of: ALBULA_TUNNEL, with: "")
+                logger.log("Got the data form the stops: \(trainStopss)")
+                logger.log("Hij zit er: \(trainStops.contains(ALBULA_TUNNEL)) in")
+                let data = Data(trainStopss.utf8)
                 logger.log("data: \(data.debugDescription)")
                 let trainStopsJson = try JSONDecoder().decode(TrainStopUpdate.self, from: data)
+                print("HII")
                 return trainStopsJson.content[0]
             case let .data(data):
                 logger.log("We got data which isn't expected \(data.debugDescription)")
@@ -82,6 +86,7 @@ class TrainWebsocket: ObservableObject {
             }
         } catch {
             self.logger.error("We got an error with send \(msg) to the weboscket server or with the receiving met error \(String(describing: error))")
+            print("HII")
             return nil
         }
         
