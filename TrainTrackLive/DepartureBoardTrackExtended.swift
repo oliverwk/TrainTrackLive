@@ -41,7 +41,16 @@ extension DepartureBoardTrack {
         let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970))
         let fracs = (tnow - tstart)/(tend - tstart)
         logger.log("fracs: \(fracs, privacy: .public) from updating")
-        let updatedTrainStatus = TrainTrackWidgetAttributes.ContentState(fracBegin: fracs, CurrentORArrivingStation: currentORArrivingStation?.station.name ?? "Nergens", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now, currentTijd: currentORArrivingStation?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation?.arrivalDate ?? Date.now) - (currentORArrivingStation?.departureDate ?? Date.now)))
+        let updatedTrainStatus = TrainTrackWidgetAttributes.ContentState(
+            fracBegin: fracs,
+            CurrentORArrivingStation: currentORArrivingStation?.station.name ?? "Nergens",
+            delay: trainDepartures.departures[i].stop.delay,
+            eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")",
+            aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate,
+            vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now,
+            currentTijd: currentORArrivingStation?.arrivalDate ?? Date.now,
+            tijdCurrentSpenderen: ((currentORArrivingStation?.arrivalDate ?? Date.now) - (currentORArrivingStation?.departureDate ?? Date.now))
+        )
         let alertConfiguration: AlertConfiguration?
         if Int(Date.now.unix) >= trainDepartures.departures[i].stop.arrivalTimestamp ?? Date.now.unix.int && trainDepartures.departures[i].stop.departureTimestamp ?? Date.now.unix.int <= Int(Date.now.unix) {
             alertConfiguration = AlertConfiguration(title: "Trein vertrekt", body: "De trein van \(trainDepartures.departures[i].stop.departureDate.uurMinTekst) vertrekt nu", sound: .default)

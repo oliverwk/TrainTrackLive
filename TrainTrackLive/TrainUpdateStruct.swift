@@ -58,7 +58,8 @@ struct TrainStopStation: Codable {
     let arrivalDelay: Int?
     let arrivalTime, aimedArrivalTime: Int
     let cancelled: Bool
-    let departureDelay, departureTime, aimedDepartureTime: Int
+    let departureDelay: Int?
+    let departureTime, aimedDepartureTime: Int
     let noDropOff, noPickUp: Bool
     let stationID: String?
     let stationName: String

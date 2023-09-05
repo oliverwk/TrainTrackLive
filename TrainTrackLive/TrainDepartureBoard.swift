@@ -102,13 +102,21 @@ struct PassList: Codable {
     let station: TrainStation
     let arrival:  String?// Date?
     var arrivalDate: Date {
-        return Date(timeIntervalSince1970: Double(arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+        if arrivalTimestamp ?? 1000001 < 100000  {
+            return Date(timeIntervalSince1970: Date.now.noon.unix + Double(arrivalTimestamp ?? 0 )) // TODO: maak dit van tijdzone afhanklijk
+        } else {
+            return Date(timeIntervalSince1970: Double(arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+        }
     }
     let arrivalTimestamp: Int?
     let departureTime: String?// Date?
     let departureTimestamp: Int?
     var departureDate: Date {
-        return Date(timeIntervalSince1970: Double(departureTimestamp!))
+        if departureTimestamp ?? 1000001 < 100000  {
+            return Date(timeIntervalSince1970: Date.now.noon.unix + Double(departureTimestamp ?? 0 )) // TODO: maak dit van tijdzone afhanklijk
+        } else {
+            return Date(timeIntervalSince1970: Double(departureTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+        }
     }
     let delay: Int?
     let platform: String?
@@ -142,12 +150,20 @@ struct Stop: Codable {
     let arrival: String?
     let arrivalTimestamp: Int?
     var arrivalDate: Date {
-        return Date(timeIntervalSince1970: Double(arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+        if arrivalTimestamp ?? 1000001 < 100000  {
+            return Date(timeIntervalSince1970: Date.now.noon.unix + Double(arrivalTimestamp ?? 0 )+3600.0)
+        } else {
+            return Date(timeIntervalSince1970: Double(arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970+3600))) // TODO: maak dit van tijdzone afhanklijk
+        }
     }
     let departureTime: String?// Date?
     let departureTimestamp, delay: Int?
     var departureDate: Date {
-        return Date(timeIntervalSince1970: Double(departureTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+        if departureTimestamp ?? 1000001 < 100000  {
+            return Date(timeIntervalSince1970: Date.now.noon.unix + Double(departureTimestamp ?? 0 )+3600.0)
+        } else {
+            return Date(timeIntervalSince1970: Double(departureTimestamp ?? Int(Date.now.timeIntervalSince1970+3600))) // TODO: maak dit van tijdzone afhanklijk
+        }
     }
     let platform: String?
     let prognosis: Prognosis

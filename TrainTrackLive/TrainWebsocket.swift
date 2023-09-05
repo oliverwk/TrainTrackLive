@@ -15,7 +15,8 @@ class TrainWebsocket: ObservableObject {
     
     @Published var locations = [LocationTrain]()
     var messages = [String]()
-    let templ = TrainUpdate(source: "buffer", timestamp: 1608098, clientReference: "", content: [])
+    var boundbox: String = ""
+    var searchTimer: Timer?
     
     private var webSocketTask: URLSessionWebSocketTask?
     let logger = Logger(
@@ -27,7 +28,28 @@ class TrainWebsocket: ObservableObject {
         self.connect()
     }
     
-    private func connect() {
+    func updateBoundlocation(_ oundlocationss: MKCoordinateRegion) {
+        self.searchTimer?.invalidate()
+        
+        // BBOX 583092.25 6861871.0 538520.6 6788266.0 13 mots=tram,subway,rail,bus,ferry,cablecar,gondola,funicular,coach
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] (timer) in
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                let boundLinksOnder = epsg4326toEpsg3857([Float(oundlocationss.center.latitude+oundlocationss.span.latitudeDelta), Float(oundlocationss.center.longitude+oundlocationss.span.longitudeDelta)])
+                let boundRechtsBoven = epsg4326toEpsg3857([Float(oundlocationss.center.latitude-oundlocationss.span.latitudeDelta), Float(oundlocationss.center.longitude-oundlocationss.span.longitudeDelta)])
+                let boundboxNieuw = "\(boundLinksOnder[0]) \(boundLinksOnder[1]) \(boundRechtsBoven[0]) \(boundRechtsBoven[1])"
+                self?.logger.log("boundboxNieuw: \"\(boundboxNieuw)\"")
+                self?.boundbox = boundboxNieuw
+                DispatchQueue.main.async {
+                    self?.locations = []
+                }
+                self?.messages = []
+                self?.connect()
+            }
+        })
+        
+    }
+    
+    func connect() {
         let map_key: String
         if (UserDefaults.standard.string(forKey: "token_map") != nil) {
             self.logger.log("Er was een map token gevonden in settings, die moet worden bewaard in de instellingen app. Dit is hem: \(String(describing: UserDefaults.standard.string(forKey: "token_map")), privacy: .public)")
@@ -41,13 +63,15 @@ class TrainWebsocket: ObservableObject {
         let request = URLRequest(url: url)
         webSocketTask = URLSession.shared.webSocketTask(with: request)
         webSocketTask?.resume()
-        var boundbox: String
+        
         // boundbox = "819862.6976440828 5929181.685732176 843405.3023559172 5938736.3142678235"; // Dit is Bern
         // boundbox = "1075401.940808419 5866728.345598243 1095724.427047632 5896720.6813848780"; // Dit is berguen
-        //boundbox = "\(epsg4326toEpsg3857([(mapRegion.center.longitude-0.2), (mapRegion.center.latitude-0.2)]))";
+        // boundbox = "\(epsg4326toEpsg3857([(mapRegion.center.longitude-0.2), (mapRegion.center.latitude-0.2)]))";
         // TODO: Maak dit met de locatie mee volgen
+        
         boundbox = "1011017.444807091 5850052.447254116 1156809.715192909 5934664.0327458850"; // Dit is berguen met omgeving
         sendMessage("BBOX \(boundbox) 13 gen=100 mots=subway,rail,ferry,cablecar,gondola,funicular")
+        // BBOX <left> <bottom> <right> <top> <zoom>[ tenant=<tenant>][ gen=<generalization>][ mots=<mot1,mot2,...>]
         receiveMessage()
         sendMessage("BUFFER 180 100")
         receiveMessage()
@@ -64,15 +88,13 @@ class TrainWebsocket: ObservableObject {
             let messageStop = try await webSocketTask?.receive()
             switch messageStop {
             case let .string(trainStops):
-//                logger.log("Got the data form the stops: \(trainStops.prettyJSON)")
+                //                logger.log("Got the data form the stops: \(trainStops.prettyJSON)")
                 self.messages.append(trainStops)
                 let trainStopss = trainStops.replacingOccurrences(of: ALBULA_TUNNEL, with: "")
                 logger.log("Got the data form the stops: \(trainStopss)")
-                logger.log("Hij zit er: \(trainStops.contains(ALBULA_TUNNEL)) in")
                 let data = Data(trainStopss.utf8)
                 logger.log("data: \(data.debugDescription)")
                 let trainStopsJson = try JSONDecoder().decode(TrainStopUpdate.self, from: data)
-                print("HII")
                 return trainStopsJson.content[0]
             case let .data(data):
                 logger.log("We got data which isn't expected \(data.debugDescription)")
@@ -86,7 +108,6 @@ class TrainWebsocket: ObservableObject {
             }
         } catch {
             self.logger.error("We got an error with send \(msg) to the weboscket server or with the receiving met error \(String(describing: error))")
-            print("HII")
             return nil
         }
         
@@ -103,32 +124,16 @@ class TrainWebsocket: ObservableObject {
                     self.messages.append(text)
                     // JSON parse
                     let trainUpdate: TrainUpdate?
-                    do {
-                        let data = text.data(using: .utf8)!
-                        self.logger.log("There was data from the server")
-                        trainUpdate = try? JSONDecoder().decode(TrainUpdate.self, from: data)
-                        
-                        let _ = try self.probeerIets()// Dit is om de error weg te krijgen
-                        
-                        if trainUpdate?.source == "websocket" {
-                            self.logger.log("Het was een status open bericht")
-                            return
-                        }
-                    } catch let errorOG {
-                        self.logger.fault("We konden niet de data decocden deze data: \(text, privacy: .public)")
-                        
-                        var request = URLRequest(url: URL(string: "http://localhost:8080")!)
-                        request.httpMethod = "POST"
-                        request.httpBody = "errorJson=\(text)".data(using: .utf8)
-                        
-                        let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
-                            guard let _ = data else { return }
-                            self.logger.log("Req is door gegaan")
-                            fatalError("Unable to decode JSON en error: \(String(describing: errorOG)) ;;; \(text)")
-                        }
-                        
-                        task.resume()
+                    let data = text.data(using: .utf8)!
+                    self.logger.log("There was data from the server")
+                    
+                    trainUpdate = try? JSONDecoder().decode(TrainUpdate.self, from: data)
+                    
+                    if trainUpdate?.source == "websocket" {
+                        self.logger.log("Het was een status open bericht")
+                        return
                     }
+                    
                     
                     if let trainUpdateSafe = trainUpdate {
                         self.logger.log("TrainUpdate is door en nu locaties toevoegen")

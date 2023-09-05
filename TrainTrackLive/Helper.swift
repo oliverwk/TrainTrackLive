@@ -31,8 +31,8 @@ func epsg3857toEpsg4326(_ pos: [Float]) -> [Float] {
 func epsg4326toEpsg3857(_ coordinates: [Float]) -> [Float] {
     var x: Float = 0.0;
     var y: Float = 0.0;
-    x = (coordinates[0] * 20037508.34) / 180.0;
-    y = log(tan(((90.0 + coordinates[1]) * Float.pi) / 360.0)) / (Float.pi / 180.0);
+    x = (coordinates[1] * 20037508.34) / 180.0;
+    y = log(tan(((90.0 + coordinates[0]) * Float.pi) / 360.0)) / (Float.pi / 180.0);
     y = Float((y * 20037508.34) / 180.0);
     return [x, y];
 }
@@ -94,6 +94,16 @@ extension Date {
         dateFormatter.locale = Locale(identifier: "nl_NL")
         let formattedDate = dateFormatter.string(from: self)
         return formattedDate
+    }
+    
+    var noon: Date {
+        let gregorian = Calendar(identifier: .gregorian)
+        var components = gregorian.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date())
+
+        components.hour = 1
+        components.minute = 0
+        components.second = 0
+        return gregorian.date(from: components)!
     }
     
     var unix: Double {
