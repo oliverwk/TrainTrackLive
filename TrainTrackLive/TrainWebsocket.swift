@@ -31,13 +31,13 @@ class TrainWebsocket: ObservableObject {
         let map_key: String
         if (UserDefaults.standard.string(forKey: "token_map") != nil) {
             self.logger.log("Er was een map token gevonden in settings, die moet worden bewaard in de instellingen app. Dit is hem: \(String(describing: UserDefaults.standard.string(forKey: "token_map")), privacy: .public)")
-            map_key = UserDefaults.standard.string(forKey: "token_map") ?? "5cc87b12d7c5370001c1d655842890e432df4736b3553feb3c7cd2d6"
+            map_key = UserDefaults.standard.string(forKey: "token_map") ?? "5cc87b12d7c5370001c1d655babfd9dc82ef43d99b1f12763a1ca6b4"
             UserDefaults.standard.set(UserDefaults.standard.string(forKey: "token_map"), forKey: "token_map")
         } else {
-            map_key = "5cc87b12d7c5370001c1d655842890e432df4736b3553feb3c7cd2d6"
+            map_key = "5cc87b12d7c5370001c1d655babfd9dc82ef43d99b1f12763a1ca6b4"
             UserDefaults.standard.set(map_key, forKey: "token_map")
         }
-        guard let url = URL(string: "wss://api.geops.io/tracker-ws/v1/?key=\(map_key)") else { return }
+        guard let url = URL(string: "wss://tralis-tracker-api.geops.io/ws?key=\(map_key)") else { return }
         let request = URLRequest(url: url)
         webSocketTask = URLSession.shared.webSocketTask(with: request)
         webSocketTask?.resume()
@@ -64,7 +64,7 @@ class TrainWebsocket: ObservableObject {
             let messageStop = try await webSocketTask?.receive()
             switch messageStop {
             case let .string(trainStops):
-                logger.log("Got the data form the stops: \(trainStops)")
+                logger.log("Got the data form the stops: \(trainStops.prettyJSON)")
                 self.messages.append(trainStops)
                 let data = Data(trainStops.utf8)
                 logger.log("data: \(data.debugDescription)")
@@ -83,7 +83,6 @@ class TrainWebsocket: ObservableObject {
         } catch {
             self.logger.error("We got an error with send \(msg) to the weboscket server or with the receiving met error \(String(describing: error))")
             return nil
-            
         }
         
     }
@@ -92,7 +91,7 @@ class TrainWebsocket: ObservableObject {
         webSocketTask?.receive { result in
             switch result {
             case .failure(let error):
-                self.logger.error("\(error.localizedDescription)")
+                self.logger.error("Er was een error met ontvangen van de berichten: \(String(describing: error))")
             case .success(let message):
                 switch message {
                 case .string(let text):
@@ -120,7 +119,7 @@ class TrainWebsocket: ObservableObject {
                         let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
                             guard let _ = data else { return }
                             self.logger.log("Req is door gegaan")
-                            fatalError("Unable to decode JSON en error: \(String(describing: errorOG.localizedDescription)) ;;;;;; \(text)")
+                            fatalError("Unable to decode JSON en error: \(String(describing: errorOG)) ;;; \(text)")
                         }
                         
                         task.resume()
@@ -173,7 +172,7 @@ class TrainWebsocket: ObservableObject {
                 case .data(let data):
                     // Handle binary data
                     self.logger.log("De data is binair")
-                    self.logger.log("\(data.debugDescription, privacy: .public)")
+                    self.logger.log("Data: \(data.debugDescription, privacy: .public)")
                     break
                 @unknown default:
                     print("HI")
@@ -187,7 +186,7 @@ class TrainWebsocket: ObservableObject {
         guard let _ = message.data(using: .utf8) else { return }
         webSocketTask?.send(.string(message)) { error in
             if let error = error {
-                self.logger.error("Er was een error met het versturen van een  bericht: \(message, privacy: .public) met de error: \(error.localizedDescription, privacy: .public)")
+                self.logger.error("Er was een error met het versturen van een  bericht: \(message, privacy: .public) met de error: \(String(describing: error)), privacy: .public)")
             }
         }
     }
