@@ -106,6 +106,9 @@ extension Date {
         return gregorian.date(from: components)!
     }
     
+    init(unix: Int) {
+        self.init(timeIntervalSince1970: Double(unix))
+    }
     var unix: Double {
         self.timeIntervalSince1970
     }
@@ -161,6 +164,9 @@ extension Data {
     }
 }
 
-let ALBULA_TUNNEL = """
+let ALBULA_TUNNEL_PENDING = """
 {"state":"PENDING","formation_id":null,"arrivalDelay":null,"arrivalTime":null,"aimedArrivalTime":null,"cancelled":false,"departureDelay":null,"departureTime":null,"aimedDepartureTime":null,"noDropOff":true,"noPickUp":true,"stationId":null,"stationName":"Albulatunnel","coordinate":[1092194,5872816],"platform":null},
+"""
+let ALBULA_TUNNEL_LEAVING = """
+{"state":"LEAVING","formation_id":null,"arrivalDelay":null,"arrivalTime":null,"aimedArrivalTime":null,"cancelled":false,"departureDelay":null,"departureTime":null,"aimedDepartureTime":null,"noDropOff":true,"noPickUp":true,"stationId":null,"stationName":"Albulatunnel","coordinate":[1092194,5872816],"platform":null},
 """

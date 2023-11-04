@@ -15,7 +15,7 @@ extension DepartureBoardTrack {
         // Dit is de reloading knop
         var currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
             if stop.station.name != nil {
-                if (Date.now.timeIntervalSince1970 > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.timeIntervalSince1970) {
+                if (Date.now.unix > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.unix) {
                     // De trein is hier nog niet geweest
                     return true
                 } else {
@@ -36,9 +36,9 @@ extension DepartureBoardTrack {
             }.first
         }
         
-        let tnow = Double(Date.now.timeIntervalSince1970)
+        let tnow = Double(Date.now.unix)
         let tstart = Double(trainDepartures.departures[i].stop.departureTimestamp!)
-        let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970))
+        let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.unix))
         let fracs = (tnow - tstart)/(tend - tstart)
         logger.log("fracs: \(fracs, privacy: .public) from updating")
         let updatedTrainStatus = TrainTrackWidgetAttributes.ContentState(
@@ -69,7 +69,7 @@ extension DepartureBoardTrack {
         if ActivityAuthorizationInfo().areActivitiesEnabled {
             var currentORArrivingStation = trainDepartures.departures[i].passList.filter { stop in
                 if stop.station.name != nil {
-                    if (Date.now.timeIntervalSince1970 > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.timeIntervalSince1970) {
+                    if (Date.now.unix > Double(stop.arrivalTimestamp ?? Int(9.0e15))) && (Double(stop.departureTimestamp ?? 0) > Date.now.unix) {
                         // De trein is hier nog niet geweest
                         return true
                     } else {
@@ -90,9 +90,9 @@ extension DepartureBoardTrack {
                 }.first
             }
             
-            let tnow = Double(Date.now.timeIntervalSince1970)
+            let tnow = Double(Date.now.unix)
             let tstart = Double(trainDepartures.departures[i].stop.departureTimestamp!)
-            let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970))
+            let tend = Double(trainDepartures.departures[i].passList.last?.arrivalTimestamp ?? trainDepartures.departures[i].stop.arrivalTimestamp ?? Int(Date.now.unix))
             let fracs = (tnow - tstart)/(tend - tstart)
             logger.log("fracs: \(fracs, privacy: .public)")
             let initialContentState = TrainTrackWidgetAttributes.ContentState(fracBegin: fracs, CurrentORArrivingStation: currentORArrivingStation?.station.name ?? " ", delay: trainDepartures.departures[i].stop.delay, eindSpoor: "\(trainDepartures.departures[i].passList.last?.platform ?? "Pl. 0")", aankomstTijd: trainDepartures.departures[i].passList.last?.arrivalDate ?? trainDepartures.departures[i].stop.arrivalDate, vertrekTijd: trainDepartures.departures[i].passList.first?.departureDate ?? Date.now, currentTijd: currentORArrivingStation?.arrivalDate ?? Date.now, tijdCurrentSpenderen: ((currentORArrivingStation?.arrivalDate ?? Date.now) - (currentORArrivingStation?.departureDate ?? Date.now)))

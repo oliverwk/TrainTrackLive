@@ -105,7 +105,7 @@ struct PassList: Codable {
         if arrivalTimestamp ?? 1000001 < 100000  {
             return Date(timeIntervalSince1970: Date.now.noon.unix + Double(arrivalTimestamp ?? 0 )) // TODO: maak dit van tijdzone afhanklijk
         } else {
-            return Date(timeIntervalSince1970: Double(arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+            return Date(unix: (arrivalTimestamp ?? Int(Date.now.unix)))
         }
     }
     let arrivalTimestamp: Int?
@@ -115,7 +115,7 @@ struct PassList: Codable {
         if departureTimestamp ?? 1000001 < 100000  {
             return Date(timeIntervalSince1970: Date.now.noon.unix + Double(departureTimestamp ?? 0 )) // TODO: maak dit van tijdzone afhanklijk
         } else {
-            return Date(timeIntervalSince1970: Double(departureTimestamp ?? Int(Date.now.timeIntervalSince1970)))
+            return Date(unix: (departureTimestamp ?? Int(Date.now.unix)))
         }
     }
     let delay: Int?
@@ -153,7 +153,7 @@ struct Stop: Codable {
         if arrivalTimestamp ?? 1000001 < 100000  {
             return Date(timeIntervalSince1970: Date.now.noon.unix + Double(arrivalTimestamp ?? 0 )+3600.0)
         } else {
-            return Date(timeIntervalSince1970: Double(arrivalTimestamp ?? Int(Date.now.timeIntervalSince1970+3600))) // TODO: maak dit van tijdzone afhanklijk
+            return Date(unix: (arrivalTimestamp ?? Int(Date.now.unix+3600))) // TODO: maak dit van tijdzone afhanklijk
         }
     }
     let departureTime: String?// Date?
@@ -162,7 +162,7 @@ struct Stop: Codable {
         if departureTimestamp ?? 1000001 < 100000  {
             return Date(timeIntervalSince1970: Date.now.noon.unix + Double(departureTimestamp ?? 0 )+3600.0)
         } else {
-            return Date(timeIntervalSince1970: Double(departureTimestamp ?? Int(Date.now.timeIntervalSince1970+3600))) // TODO: maak dit van tijdzone afhanklijk
+            return Date(unix: (departureTimestamp ?? Int(Date.now.unix+3600))) // TODO: maak dit van tijdzone afhanklijk
         }
     }
     let platform: String?

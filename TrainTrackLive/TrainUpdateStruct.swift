@@ -134,7 +134,7 @@ struct Properties: Codable {
     let line: Line
     let timestamp: Int
     let state: TrainState?
-    let timeSinceUpdate: String?
+    let timeSinceUpdate: Int?
     let hasRealtime, hasRealtimeJourney: Bool
     let operatorProvidesRealtimeJourney: OperatorProvidesRealtimeJourney
     let hasJourney: Bool

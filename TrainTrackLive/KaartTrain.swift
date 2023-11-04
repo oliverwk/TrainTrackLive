@@ -44,14 +44,15 @@ struct KaartTrain: View {
             }.padding()
             Map(coordinateRegion: $locationViewModel.mapRegion, annotationItems: websocket.locations) { location in
                 MapAnnotation(coordinate: location.middleCoordinatesMap) {
-                    Image(systemName: "train.side.front.car")
+//                    Image(systemName: location.opData.content.properties.type == "rail" ? "train.side.front.car" : "bus")
+                    Image(systemName: "train.side.front.car" )
                         .font(.title2)
                         .foregroundColor(.blue)
                         .onTapGesture {
-                            logger.log("Tapped on \(location.name, privacy: .public)")
+                            logger.log("Tapped on\(location.name, privacy: .public)")
                             Task {
                                 let stops = await websocket.getStopsTrains(location.id)
-                                self.trainName = "\(stops?.longName ?? "Trein") vanaf \(stops?.stations.first?.stationName ?? stops?.stations[0].stationName ?? "station-1") naar \(stops?.destination ?? "station-2")"
+                                self.trainName = "De \(Date(unix: (location.timeIntervals[1][0]/1000)+3600).uurMinTekst) \(stops?.longName ?? "Trein") vanaf \(stops?.stations.first?.stationName ?? stops?.stations[0].stationName ?? "station-1") naar \(stops?.destination ?? "station-2")"
                             }
                             logger.log("Cords real \(location.coordinatesMap, privacy: .public)")
                             logger.log("mapRegion: \(mapRegion.center.longitude, privacy: .public)")

@@ -7,17 +7,385 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CE1C7C0E-2F64-40E7-8241-37B1688911BA"
+            uuid = "8E1BB7B8-CF0A-42AF-AECA-A067CB24F029"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TrainTrackLive/TrainWebsocket.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
             landmarkName = "receiveMessage()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "8E1BB7B8-CF0A-42AF-AECA-A067CB24F029 - 8066c0977379dffc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.NSURLSessionWebSocketTask.Message, Swift.Error&gt;) -&gt; () in TrainTrackLive.TrainWebsocket.receiveMessage() -&gt; ()"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "25216">
+               </Location>
+               <Location
+                  uuid = "8E1BB7B8-CF0A-42AF-AECA-A067CB24F029 - 8066c0977379dffc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.NSURLSessionWebSocketTask.Message, Swift.Error&gt;) -&gt; () in TrainTrackLive.TrainWebsocket.receiveMessage() -&gt; ()"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "25176">
+               </Location>
+               <Location
+                  uuid = "8E1BB7B8-CF0A-42AF-AECA-A067CB24F029 - 8066c0977379dffc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.NSURLSessionWebSocketTask.Message, Swift.Error&gt;) -&gt; () in TrainTrackLive.TrainWebsocket.receiveMessage() -&gt; ()"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "25023">
+               </Location>
+               <Location
+                  uuid = "8E1BB7B8-CF0A-42AF-AECA-A067CB24F029 - 8066c0977379dffc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.NSURLSessionWebSocketTask.Message, Swift.Error&gt;) -&gt; () in TrainTrackLive.TrainWebsocket.receiveMessage() -&gt; ()"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "24665">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "957B31ED-F253-42D0-B969-A0067757B4E3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrainTrackLive/TrainWebsocket.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "receiveMessage()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "957B31ED-F253-42D0-B969-A0067757B4E3 - 8066c0977379c16b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.NSURLSessionWebSocketTask.Message, Swift.Error&gt;) -&gt; () in TrainTrackLive.TrainWebsocket.receiveMessage() -&gt; ()"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "177"
+                  endingLineNumber = "177"
+                  offsetFromSymbolStart = "22499">
+               </Location>
+               <Location
+                  uuid = "957B31ED-F253-42D0-B969-A0067757B4E3 - 8066c0977379c017"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.NSURLSessionWebSocketTask.Message, Swift.Error&gt;) -&gt; () in TrainTrackLive.TrainWebsocket.receiveMessage() -&gt; ()"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "181"
+                  endingLineNumber = "181"
+                  offsetFromSymbolStart = "22441">
+               </Location>
+               <Location
+                  uuid = "957B31ED-F253-42D0-B969-A0067757B4E3 - 8066c0977379c08a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.NSURLSessionWebSocketTask.Message, Swift.Error&gt;) -&gt; () in TrainTrackLive.TrainWebsocket.receiveMessage() -&gt; ()"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "178"
+                  endingLineNumber = "178"
+                  offsetFromSymbolStart = "25340">
+               </Location>
+               <Location
+                  uuid = "957B31ED-F253-42D0-B969-A0067757B4E3 - 8066c0977379c08a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;__C.NSURLSessionWebSocketTask.Message, Swift.Error&gt;) -&gt; () in TrainTrackLive.TrainWebsocket.receiveMessage() -&gt; ()"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "178"
+                  endingLineNumber = "178"
+                  offsetFromSymbolStart = "24982">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrainTrackLive/TrainWebsocket.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "getStopsTrains(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 1e1b1679406832d7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "19520">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - dd7de47c2a5176d5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "16696">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 9847b280bdbb8aeb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "16188">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 26daa986ca8f68e8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "3239">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 44a98087079ccee9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "3170">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 1e1b1679406832d7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "19475">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - dd7de47c2a5176d5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "16651">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 9847b280bdbb8aeb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "16143">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 1e1b1679406832d7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "19812">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - dd7de47c2a5176d5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "16988">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 9847b280bdbb8aeb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "16480">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 1e1b1679406832d7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "19885">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - dd7de47c2a5176d5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "17061">
+               </Location>
+               <Location
+                  uuid = "D4AE5628-D2DA-4A14-A522-3AFF9569EBAE - 9847b280bdbb8aeb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for TrainTrackLive.TrainWebsocket.getStopsTrains(Swift.String) async -&gt; Swift.Optional&lt;TrainTrackLive.TrainStopContent&gt;"
+                  moduleName = "TrainTrackLive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mwk/iOS-Projecten/TrainTrackLive/TrainTrackLive/TrainWebsocket.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "110"
+                  endingLineNumber = "110"
+                  offsetFromSymbolStart = "16553">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

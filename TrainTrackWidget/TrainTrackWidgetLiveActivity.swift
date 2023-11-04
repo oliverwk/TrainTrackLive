@@ -40,7 +40,7 @@ struct TrainTrackWidgetLiveActivity: Widget {
                         if context.state.tijdCurrentSpenderen > 0 {
                             Text("\(context.state.tijdCurrentSpenderen.difInHour) min hier").foregroundColor(.blue).foregroundColor(.black)
                         } else {
-                            Text("\((context.state.aankomstTijd.timeIntervalSince1970-Date.now.timeIntervalSince1970).difInHour)").foregroundColor(.black)
+                            Text("\((context.state.aankomstTijd.unix-Date.now.unix).difInHour)").foregroundColor(.black)
                         }
                        
                         Spacer()
