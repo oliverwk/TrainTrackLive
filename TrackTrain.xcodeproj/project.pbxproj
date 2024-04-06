@@ -11,6 +11,9 @@
 		E66443EA2BC15B7E00A0AA81 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443E92BC15B7E00A0AA81 /* ContentView.swift */; };
 		E66443EC2BC15B8000A0AA81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E66443EB2BC15B8000A0AA81 /* Assets.xcassets */; };
 		E66443F02BC15B8000A0AA81 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E66443EF2BC15B8000A0AA81 /* Preview Assets.xcassets */; };
+		E66443F72BC15DE300A0AA81 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443F62BC15DE300A0AA81 /* Models.swift */; };
+		E66443F92BC15E0300A0AA81 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443F82BC15E0300A0AA81 /* Helper.swift */; };
+		E66443FB2BC17C3600A0AA81 /* LocationHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +23,10 @@
 		E66443EB2BC15B8000A0AA81 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E66443ED2BC15B8000A0AA81 /* TrackTrain.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrackTrain.entitlements; sourceTree = "<group>"; };
 		E66443EF2BC15B8000A0AA81 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E66443F62BC15DE300A0AA81 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		E66443F82BC15E0300A0AA81 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelpers.swift; sourceTree = "<group>"; };
+		E66443FC2BC17FE500A0AA81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +43,7 @@
 		E66443DB2BC15B7D00A0AA81 = {
 			isa = PBXGroup;
 			children = (
+				E66443F82BC15E0300A0AA81 /* Helper.swift */,
 				E66443E62BC15B7E00A0AA81 /* TrackTrain */,
 				E66443E52BC15B7E00A0AA81 /* Products */,
 			);
@@ -52,8 +60,11 @@
 		E66443E62BC15B7E00A0AA81 /* TrackTrain */ = {
 			isa = PBXGroup;
 			children = (
+				E66443FC2BC17FE500A0AA81 /* Info.plist */,
 				E66443E72BC15B7E00A0AA81 /* TrackTrainApp.swift */,
 				E66443E92BC15B7E00A0AA81 /* ContentView.swift */,
+				E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */,
+				E66443F62BC15DE300A0AA81 /* Models.swift */,
 				E66443EB2BC15B8000A0AA81 /* Assets.xcassets */,
 				E66443ED2BC15B8000A0AA81 /* TrackTrain.entitlements */,
 				E66443EE2BC15B8000A0AA81 /* Preview Content */,
@@ -139,8 +150,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E66443FB2BC17C3600A0AA81 /* LocationHelpers.swift in Sources */,
+				E66443F72BC15DE300A0AA81 /* Models.swift in Sources */,
 				E66443EA2BC15B7E00A0AA81 /* ContentView.swift in Sources */,
 				E66443E82BC15B7E00A0AA81 /* TrackTrainApp.swift in Sources */,
+				E66443F92BC15E0300A0AA81 /* Helper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,8 +286,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"TrackTrain/Preview Content\"";
 				DEVELOPMENT_TEAM = 6CDWQZK7UX;
 				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrackTrain/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -310,8 +326,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"TrackTrain/Preview Content\"";
 				DEVELOPMENT_TEAM = 6CDWQZK7UX;
 				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TrackTrain/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
