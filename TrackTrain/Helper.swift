@@ -172,6 +172,15 @@ let ALBULA_TUNNEL_LEAVING = """
 """
 
 func coordinate(_ lat: Float, _ long: Float) -> CLLocationCoordinate2D {
-    return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(long)) 
+    return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(long))
+}
 
+func getTrain(_ trainlist: [LocationTrain], _ trainid: String) -> LocationTrain? {
+    if let trainWithId = trainlist.first(where: {$0.id == trainid}) {
+       // it exists, do something
+        return trainWithId
+    } else {
+       //item could not be found
+        return nil
+    }
 }

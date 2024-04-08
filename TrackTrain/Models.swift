@@ -9,7 +9,11 @@ import Foundation
 import SwiftUI
 import MapKit
 
-struct LocationTrain: Identifiable, Equatable {
+struct LocationTrain: Identifiable, Equatable, CustomStringConvertible {
+    var description: String {
+        return "{ id: \(id), name: \(name), colour: \(colour), coordinates: \(coordinates), timeIntervals: \(timeIntervals), coordinatesSwiftui: \(coordinatesSwiftui), coordinateMap: \(coordinateMap), coordinatesMap: \(coordinatesMap) }"
+    }
+    
     let id: String
     let name: String
     let colour: Color

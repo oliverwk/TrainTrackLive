@@ -43,7 +43,6 @@
 		E66443DB2BC15B7D00A0AA81 = {
 			isa = PBXGroup;
 			children = (
-				E66443F82BC15E0300A0AA81 /* Helper.swift */,
 				E66443E62BC15B7E00A0AA81 /* TrackTrain */,
 				E66443E52BC15B7E00A0AA81 /* Products */,
 			);
@@ -65,6 +64,7 @@
 				E66443E92BC15B7E00A0AA81 /* ContentView.swift */,
 				E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */,
 				E66443F62BC15DE300A0AA81 /* Models.swift */,
+				E66443F82BC15E0300A0AA81 /* Helper.swift */,
 				E66443EB2BC15B8000A0AA81 /* Assets.xcassets */,
 				E66443ED2BC15B8000A0AA81 /* TrackTrain.entitlements */,
 				E66443EE2BC15B8000A0AA81 /* Preview Content */,

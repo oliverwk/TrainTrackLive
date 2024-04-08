@@ -23,6 +23,7 @@ struct ContentView: View {
     @State private var position: MapCameraPosition = .automatic
     @State private var visibleRegion: MKCoordinateRegion?
     @State private var selectedItem: String?
+    @State private var selectedRoute: LocationTrain?
     
     
     var body: some View {
@@ -49,25 +50,31 @@ struct ContentView: View {
             HStack {
                 HStack {
                     Spacer()
-                    HStack {
-                        Button("Change trains", systemImage: "timelapse") {
-                            LocationsTrians[0].coordinates = [[46.612331, 9.760316]]
-                            LocationsTrians[1].coordinates = [[46.623005, 9.753640]]
-                            position = .automatic
-                        }.padding(.top)
-                        Button("", systemImage: "location") {
+                    VStack(spacing:0) {
+                        if let selectedRoute {
+                            Text("You have selected a train \(selectedRoute.)")
+                        }
+                        HStack {
+                            Button("Change trains", systemImage: "timelapse") {
+                                LocationsTrians[0].coordinates = [[46.612331, 9.760316]]
+                                LocationsTrians[1].coordinates = [[46.623005, 9.753640]]
+                                position = .automatic
+                            }.padding(.top)
+                            Button("", systemImage: "location") {
                                 let LM = LocationModel()
                                 LM.requestPermission()
                                 position = .userLocation(fallback: .automatic)
-                        }.padding(.top)
+                            }.padding(.top)
+                        }
                     }
                     Spacer()
                 }.background(.thinMaterial)
             }
         })
         .mapStyle(.standard(elevation: .realistic))
-        .onChange(of: selectedItem ?? " nothing", { oldValue, newValue in
-            logger.log("Hello changed \(newValue, privacy: .public)")
+        .onChange(of: selectedItem ?? "nothing", { oldValue, newValue in
+            print("Selected train \(newValue)")
+            selectedRoute = getTrain(LocationsTrians, selectedItem ?? "nothing")
         })
         .onAppear(perform: {
             position = .userLocation(fallback: .automatic)
@@ -78,7 +85,6 @@ struct ContentView: View {
             visibleRegion = context.region
             // Ask for a new websocket connection if this region is outside the current region.
         }
-      
     }
 }
 
