@@ -14,6 +14,8 @@
 		E66443F72BC15DE300A0AA81 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443F62BC15DE300A0AA81 /* Models.swift */; };
 		E66443F92BC15E0300A0AA81 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443F82BC15E0300A0AA81 /* Helper.swift */; };
 		E66443FB2BC17C3600A0AA81 /* LocationHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */; };
+		E6A0EAED2BC59627001493B5 /* TrainWebsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A0EAEC2BC59627001493B5 /* TrainWebsocket.swift */; };
+		E6A0EAEF2BC596D3001493B5 /* TrainStopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A0EAEE2BC596D3001493B5 /* TrainStopModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +29,8 @@
 		E66443F82BC15E0300A0AA81 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelpers.swift; sourceTree = "<group>"; };
 		E66443FC2BC17FE500A0AA81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E6A0EAEC2BC59627001493B5 /* TrainWebsocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainWebsocket.swift; sourceTree = "<group>"; };
+		E6A0EAEE2BC596D3001493B5 /* TrainStopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainStopModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,8 @@
 				E66443FC2BC17FE500A0AA81 /* Info.plist */,
 				E66443E72BC15B7E00A0AA81 /* TrackTrainApp.swift */,
 				E66443E92BC15B7E00A0AA81 /* ContentView.swift */,
+				E6A0EAEC2BC59627001493B5 /* TrainWebsocket.swift */,
+				E6A0EAEE2BC596D3001493B5 /* TrainStopModel.swift */,
 				E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */,
 				E66443F62BC15DE300A0AA81 /* Models.swift */,
 				E66443F82BC15E0300A0AA81 /* Helper.swift */,
@@ -150,11 +156,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6A0EAED2BC59627001493B5 /* TrainWebsocket.swift in Sources */,
 				E66443FB2BC17C3600A0AA81 /* LocationHelpers.swift in Sources */,
 				E66443F72BC15DE300A0AA81 /* Models.swift in Sources */,
 				E66443EA2BC15B7E00A0AA81 /* ContentView.swift in Sources */,
 				E66443E82BC15B7E00A0AA81 /* TrackTrainApp.swift in Sources */,
 				E66443F92BC15E0300A0AA81 /* Helper.swift in Sources */,
+				E6A0EAEF2BC596D3001493B5 /* TrainStopModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

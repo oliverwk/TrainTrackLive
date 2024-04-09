@@ -184,3 +184,22 @@ func getTrain(_ trainlist: [LocationTrain], _ trainid: String) -> LocationTrain?
         return nil
     }
 }
+
+func createBoundBox(_ location: MKCoordinateRegion) -> String {
+    let linksCord = Float(location.center.longitude-location.span.longitudeDelta)
+    let bendenCord = Float(location.center.latitude-location.span.latitudeDelta)
+    let linksBenedenCord = epsg4326toEpsg3857([linksCord, bendenCord])
+    let linksBenedenString = "\(linksBenedenCord[0]) \(linksBenedenCord[1])"
+    
+    let rechtsCord = Float(location.center.longitude+location.span.longitudeDelta)
+    let bovenCord = Float(location.center.latitude+location.span.latitudeDelta)
+    let rechtsBovenCord = epsg4326toEpsg3857([rechtsCord, bovenCord])
+    let rechtsBovenString = "\(rechtsBovenCord[0]) \(rechtsBovenCord[1])"
+    return "\(linksBenedenString) \(rechtsBovenString)"
+}
+
+// 9.744° -> 1085169.112921
+
+//func epsg4326toEpsg3857(_ coordinates: [Float]) -> [Float]
+   
+   
