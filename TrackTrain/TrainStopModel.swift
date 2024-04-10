@@ -21,7 +21,10 @@ struct TrainStopUpdate: Codable {
     }
 }
 // MARK: - TrainStopContent
-struct TrainStopContent: Codable {
+struct TrainStopContent: Codable, Equatable, Identifiable {
+    static func == (lhs: TrainStopContent, rhs: TrainStopContent) -> Bool {
+        lhs.id == rhs.id
+    }
     let id: String
     let color: String?
     let stroke: String?
@@ -56,10 +59,10 @@ struct TrainStopStation: Codable {
     let state: String?
     let formationID: String?
     let arrivalDelay: Int?
-    let arrivalTime, aimedArrivalTime: Int
+    let arrivalTime, aimedArrivalTime: Int?
     let cancelled: Bool
     let departureDelay: Int?
-    let departureTime, aimedDepartureTime: Int
+    let departureTime, aimedDepartureTime: Int?
     let noDropOff, noPickUp: Bool
     let stationID: String?
     let stationName: String
@@ -128,7 +131,7 @@ struct Properties: Codable {
     let genRange: [Int]
     let tenant: String
     let type: String //PropertiesType
-    let timeIntervals: [[Int]]
+    let timeIntervals: [[Int?]]
     let trainID: String
     let eventTimestamp: Int
     let line: Line
@@ -184,6 +187,7 @@ enum OperatorProvidesRealtimeJourney: String, Codable {
 enum TrainState: String, Codable {
     case boarding = "BOARDING"
     case driving = "DRIVING"
+    case cancelled = "JOURNEY_CANCELLED"
 }
 
 
@@ -192,6 +196,7 @@ enum PropertiesType: String, Codable {
     case funicular = "funicular"
     case rail = "rail"
     case tram = "tram"
+    case gondola = "gondola"
 }
 
 enum ContentType: String, Codable {

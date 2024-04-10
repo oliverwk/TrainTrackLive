@@ -20,10 +20,10 @@ struct ContentView: View {
     let preda = Town(id: "29309230", name: "Preda", coordinates: [46.588862, 9.775371])
     
     @State private var LocationsTrians: [LocationTrain] = [
-        LocationTrain(id: "RHBRE87667", name: "RHB RE87667", colour: .blue, from: Town(id: "29339230", name: "Bergün", coordinates: [46.631158, 9.746958]), to: Town(id: "29309230", name: "Preda", coordinates: [46.588862, 9.775371]), currentCoordinates: [46.606828, 9.755901],
-                      coordinates: [[46.606828, 9.755901]], timeIntervals: [[9,5]]),
+        LocationTrain(id: "RHBRE87667", name: "RHB RE87667", colour: .blue, from: Town(id: "29339230", name: "Bergün", coordinates: [46.631158, 9.746958]), to: Town(id: "29309230", name: "Preda", coordinates: [46.588862, 9.775371]),
+                      coordinates: [[46.606828, 9.755901]], timeIntervals: [[9,5]], type: .rail),
         
-        LocationTrain(id: "RHBRE87668", name: "RHB RE87668", colour: .blue, from: Town(id: "29339230", name: "Bergün", coordinates: [46.620553, 9.752464]), to: Town(id: "29309230", name: "Preda", coordinates: [46.588862, 9.775371]), currentCoordinates: [46.624910, 9.751958], coordinates: [[46.624910, 9.751958]], timeIntervals: [[9,5]])
+        LocationTrain(id: "RHBRE87668", name: "RHB RE87668", colour: .blue, from: Town(id: "29339230", name: "Bergün", coordinates: [46.620553, 9.752464]), to: Town(id: "29309230", name: "Preda", coordinates: [46.588862, 9.775371]), coordinates: [[46.624910, 9.751958]], timeIntervals: [[9,5]], type: .rail), 
     ]
     
     let locationsStation: [Town] = [Town(id: "RHBBERGUN", name: "RHB Berguen", coordinates: [46.631158, 9.746958])]
@@ -38,8 +38,8 @@ struct ContentView: View {
     var body: some View {
         Map(position: $position, selection: $selectedItem) {
 
-            ForEach(LocationsTrians) { train in
-                Marker(train.name, systemImage: "train.side.front.car", coordinate: train.coordinatesSwiftUI)
+            ForEach(websocket.locations) { train in
+                Marker("\(train.name) with type: \(train.type)", systemImage: train.type == .bus ? "bus.fill" : "train.side.front.car", coordinate: coordinate(train.currentCoordinates))
                     .tint(.blue)
                     .tag(train.id)
             }
@@ -61,40 +61,13 @@ struct ContentView: View {
             }
             
             if (selectedRoute != nil) {
-                MapPolyline(coordinates: routeLine, contourStyle: .geodesic)
+                MapPolyline(coordinates: selectedRoute?.trajectory ?? routeLine, contourStyle: .geodesic)
                     .stroke(.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
             }
             
             UserAnnotation()
         }.safeAreaInset(edge: .bottom, content: {
-            VStack {
-                if let selectedRoute {
-                    Text("\(selectedRoute.name) from \(selectedRoute.from.name) to \(selectedRoute.to.name)")
-                            .padding(10)
-                            .background(.thinMaterial)
-                            .tint(.blue)
-                            .cornerRadius(5)
-                            .padding(5)
-                }
-                HStack {
-                    Spacer()
-                    VStack(spacing:0) {
-                        HStack {
-                            Button("Change trains", systemImage: "timelapse") {
-                                LocationsTrians[0].coordinates = [[46.612331, 9.760316]]
-                                LocationsTrians[1].coordinates = [[46.623005, 9.753640]]
-                                position = .automatic
-                            }.padding(.top)
-                            Button("", systemImage: "location") {
-                                let LM = LocationModel()
-                                LM.requestPermission()
-                                position = .userLocation(fallback: .automatic)
-                            }.padding(.top)
-                        }
-                    }
-                    Spacer()
-                }.background(.thinMaterial)
-            }
+            BottomView(selectedRoute: selectedRoute, visibleRegion: $visibleRegion, position: $position, websocket: websocket)
         })
         .mapStyle(.standard(elevation: .realistic))
         .mapControls {
@@ -103,17 +76,21 @@ struct ContentView: View {
         }
         .onChange(of: selectedItem ?? "nothing", { _, trainSelected in
             print("Selected train \(trainSelected)")
-            selectedRoute = getTrain(LocationsTrians, trainSelected)
+            selectedRoute = getTrain(websocket.locations, trainSelected)
+            Task {
+                let stops = await websocket.getStopsTrains(trainSelected)
+                print("destination: \(String(describing: stops?.destination))")
+                selectedRoute?.stops = stops
+            }
             position = .automatic
         })
         .onAppear {
             position = .userLocation(fallback: .automatic)
-            websocket.connect()
         }
         .onMapCameraChange { context in
             visibleRegion = context.region
             // Ask for a new websocket connection if this region is outside the current region.
-            websocket.connect(visibleRegion!)
+            //websocket.connect(visibleRegion!)
         }
     }
 }

@@ -31,8 +31,8 @@ func epsg3857toEpsg4326(_ pos: [Float]) -> [Float] {
 func epsg4326toEpsg3857(_ coordinates: [Float]) -> [Float] {
     var x: Float = 0.0;
     var y: Float = 0.0;
-    x = (coordinates[1] * 20037508.34) / 180.0;
-    y = log(tan(((90.0 + coordinates[0]) * Float.pi) / 360.0)) / (Float.pi / 180.0);
+    x = (coordinates[0] * 20037508.34) / 180.0;
+    y = log(tan(((90.0 + coordinates[1]) * Float.pi) / 360.0)) / (Float.pi / 180.0);
     y = Float((y * 20037508.34) / 180.0);
     return [x, y];
 }
@@ -171,6 +171,10 @@ let ALBULA_TUNNEL_LEAVING = """
 {"state":"LEAVING","formation_id":null,"arrivalDelay":null,"arrivalTime":null,"aimedArrivalTime":null,"cancelled":false,"departureDelay":null,"departureTime":null,"aimedDepartureTime":null,"noDropOff":true,"noPickUp":true,"stationId":null,"stationName":"Albulatunnel","coordinate":[1092194,5872816],"platform":null},
 """
 
+func coordinate(_ latlong: [Float]) -> CLLocationCoordinate2D {
+    return CLLocationCoordinate2D(latitude: CLLocationDegrees(latlong[1]), longitude: CLLocationDegrees(latlong[0]))
+}
+
 func coordinate(_ lat: Float, _ long: Float) -> CLLocationCoordinate2D {
     return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(long))
 }
@@ -198,8 +202,12 @@ func createBoundBox(_ location: MKCoordinateRegion) -> String {
     return "\(linksBenedenString) \(rechtsBovenString)"
 }
 
-// 9.744° -> 1085169.112921
-
-//func epsg4326toEpsg3857(_ coordinates: [Float]) -> [Float]
    
-   
+func getArriTime(_ time: Int) -> String {
+    let timed = Date(timeIntervalSince1970: (Double(time)/1000.0))
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeStyle = DateFormatter.Style.short //Set time style
+    dateFormatter.dateStyle = DateFormatter.Style.none //Set date style
+    dateFormatter.timeZone = .current
+    return dateFormatter.string(from: timed)
+}
