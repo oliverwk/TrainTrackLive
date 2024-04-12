@@ -11,12 +11,13 @@
 		E66443EA2BC15B7E00A0AA81 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443E92BC15B7E00A0AA81 /* ContentView.swift */; };
 		E66443EC2BC15B8000A0AA81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E66443EB2BC15B8000A0AA81 /* Assets.xcassets */; };
 		E66443F02BC15B8000A0AA81 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E66443EF2BC15B8000A0AA81 /* Preview Assets.xcassets */; };
-		E66443F72BC15DE300A0AA81 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443F62BC15DE300A0AA81 /* Models.swift */; };
+		E66443F72BC15DE300A0AA81 /* LocationTrainModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443F62BC15DE300A0AA81 /* LocationTrainModel.swift */; };
 		E66443F92BC15E0300A0AA81 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443F82BC15E0300A0AA81 /* Helper.swift */; };
 		E66443FB2BC17C3600A0AA81 /* LocationHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */; };
 		E6A0EAED2BC59627001493B5 /* TrainWebsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A0EAEC2BC59627001493B5 /* TrainWebsocket.swift */; };
 		E6A0EAEF2BC596D3001493B5 /* TrainStopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A0EAEE2BC596D3001493B5 /* TrainStopModel.swift */; };
 		E6A0EAF12BC5A106001493B5 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A0EAF02BC5A106001493B5 /* BottomView.swift */; };
+		E6EA76EF2BC70B90006CF201 /* TrainUpdateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EA76EE2BC70B90006CF201 /* TrainUpdateModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,13 +27,14 @@
 		E66443EB2BC15B8000A0AA81 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E66443ED2BC15B8000A0AA81 /* TrackTrain.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrackTrain.entitlements; sourceTree = "<group>"; };
 		E66443EF2BC15B8000A0AA81 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E66443F62BC15DE300A0AA81 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		E66443F62BC15DE300A0AA81 /* LocationTrainModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTrainModel.swift; sourceTree = "<group>"; };
 		E66443F82BC15E0300A0AA81 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelpers.swift; sourceTree = "<group>"; };
 		E66443FC2BC17FE500A0AA81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E6A0EAEC2BC59627001493B5 /* TrainWebsocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainWebsocket.swift; sourceTree = "<group>"; };
 		E6A0EAEE2BC596D3001493B5 /* TrainStopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainStopModel.swift; sourceTree = "<group>"; };
 		E6A0EAF02BC5A106001493B5 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
+		E6EA76EE2BC70B90006CF201 /* TrainUpdateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainUpdateModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,8 +73,9 @@
 				E6A0EAF02BC5A106001493B5 /* BottomView.swift */,
 				E6A0EAEC2BC59627001493B5 /* TrainWebsocket.swift */,
 				E6A0EAEE2BC596D3001493B5 /* TrainStopModel.swift */,
+				E6EA76EE2BC70B90006CF201 /* TrainUpdateModel.swift */,
+				E66443F62BC15DE300A0AA81 /* LocationTrainModel.swift */,
 				E66443FA2BC17C3600A0AA81 /* LocationHelpers.swift */,
-				E66443F62BC15DE300A0AA81 /* Models.swift */,
 				E66443F82BC15E0300A0AA81 /* Helper.swift */,
 				E66443EB2BC15B8000A0AA81 /* Assets.xcassets */,
 				E66443ED2BC15B8000A0AA81 /* TrackTrain.entitlements */,
@@ -161,7 +164,8 @@
 			files = (
 				E6A0EAED2BC59627001493B5 /* TrainWebsocket.swift in Sources */,
 				E66443FB2BC17C3600A0AA81 /* LocationHelpers.swift in Sources */,
-				E66443F72BC15DE300A0AA81 /* Models.swift in Sources */,
+				E66443F72BC15DE300A0AA81 /* LocationTrainModel.swift in Sources */,
+				E6EA76EF2BC70B90006CF201 /* TrainUpdateModel.swift in Sources */,
 				E6A0EAF12BC5A106001493B5 /* BottomView.swift in Sources */,
 				E66443EA2BC15B7E00A0AA81 /* ContentView.swift in Sources */,
 				E66443E82BC15B7E00A0AA81 /* TrackTrainApp.swift in Sources */,

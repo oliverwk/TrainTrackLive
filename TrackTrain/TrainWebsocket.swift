@@ -47,7 +47,7 @@ class TrainWebsocket: ObservableObject {
         boundbox = createBoundBox(location)
         self.logger.log("connected with box: \(self.boundbox, privacy: .public)")
         
-        sendMessage("BBOX \(boundbox) 13") //gen=100 mots=subway,rail,ferry,cablecar,gondola,funicular")
+        sendMessage("BBOX \(boundbox) 13") // gen=100 mots=tram,subway,rail,bus,ferry,cablecar,gondola,funicular,coach")
         // BBOX <left> <bottom> <right> <top> <zoom>[ tenant=<tenant>][ gen=<generalization>][ mots=<mot1,mot2,...>]
         receiveMessage()
         sendMessage("BUFFER 180 100")
@@ -79,20 +79,27 @@ class TrainWebsocket: ObservableObject {
                             self.logger.log("TrainUpdate is goed en nu \(trainUpdate.content.count) locaties toevoegen")
                             for itemks in trainUpdate.content {
                                 if let itemk = itemks {
-                                    let trainName = " \(itemk.content.properties.tenant.uppercased()) \(itemk.content.properties.type.firstCapitalized) \(itemk.content.properties.line.name)"
+                                    let operators = itemk.content.properties.tenant.uppercased().replacingOccurrences(of: "DE-GTFS-DE", with: "DB").replacingOccurrences(of: "BELGIUM-RAIL", with: "SNCB")
+                                    let trainName = " \(operators) \(itemk.content.properties.type.firstCapitalized) \(itemk.content.properties.line.name)"
                                     let clName = itemk.content.properties.line.color
                                     let TrueColourName = (clName ?? "#0xff0000").dropFirst(2)
                                     let cl = Color(hex: String(TrueColourName))
                                     let containsTrainAlready = self.locations.contains { return $0.id == itemk.content.properties.trainID }
                                     let trainType: TrainType
-                                    // TODO: hier nog een icon toevoegen, by to sting in de enum
+                                    
                                     switch itemk.content.properties.type {
                                     case "rail":
                                         trainType = .rail
                                     case "bus":
                                         trainType = .bus
+                                    case "tram":
+                                        trainType = .tram
+                                    case "cabelcar":
+                                        trainType = .cablecar
                                     case "gondola":
                                         trainType = .gondola
+                                    case "funicular":
+                                        trainType = .funicular
                                     default:
                                         trainType = .rail
                                         self.logger.log("There was a default with: \(itemk.content.properties.type, privacy: .public)")
@@ -156,13 +163,13 @@ class TrainWebsocket: ObservableObject {
     func getStopsTrains(_ id: String) async -> TrainStopContent? {
         let msg = "GET stopsequence_\(id)"
         logger.log("sending msg to the server via websocket: \(msg)")
-        
+        let messageStop: URLSessionWebSocketTask.Message?
         do {
             try await webSocketTask?.send(.string(msg))
-            let messageStop = try await webSocketTask?.receive()
+            messageStop = try await webSocketTask?.receive()
             switch messageStop {
             case let .string(trainStops):
-//                logger.log("Got the data form the stops: \(trainStops.prettyJSON)")
+                logger.log("Got the data form the stops: \(trainStops)")
                 self.messages.append(trainStops)
 //                let trainStopss = trainStops.replacingOccurrences(of: ALBULA_TUNNEL_PENDING, with: "").replacingOccurrences(of: ALBULA_TUNNEL_LEAVING, with: "")
                 logger.log("Got the data from \(msg)")
@@ -180,7 +187,7 @@ class TrainWebsocket: ObservableObject {
                 return nil
             }
         } catch {
-            self.logger.error("We got an error with send \(msg) to the weboscket server or with the receiving met error \(String(describing: error))")
+            self.logger.error("We got an error with send and stops \(msg) to the weboscket server or with the receiving met error \(String(describing: error))")
             return nil
         }
         

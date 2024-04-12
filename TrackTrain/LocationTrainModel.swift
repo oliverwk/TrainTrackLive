@@ -102,13 +102,14 @@ enum TrainType: CustomStringConvertible {
     var description : String {
         switch self {
         // Use Internationalization, as appropriate.
-        case .rail: return "rail"
-        case .bus: return "bus"
+        case .rail: return "train.side.front.car"
+        case .bus: return "bus.fill"
+        case .tram: return "tram.fill"
         case .cablecar: return "cablecar"
-        case .gondola: return "gondola"
-        case .funicular: return "funicular"
+        case .gondola: return "cabelcar"
+        case .funicular: return "tram.fill.tunnel"
         }
       }
     
-    case rail, bus, cablecar, gondola, funicular
+    case rail, bus, cablecar, gondola, funicular, tram
 }

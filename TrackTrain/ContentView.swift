@@ -23,7 +23,7 @@ struct ContentView: View {
         LocationTrain(id: "RHBRE87667", name: "RHB RE87667", colour: .blue, from: Town(id: "29339230", name: "Bergün", coordinates: [46.631158, 9.746958]), to: Town(id: "29309230", name: "Preda", coordinates: [46.588862, 9.775371]),
                       coordinates: [[46.606828, 9.755901]], timeIntervals: [[9,5]], type: .rail),
         
-        LocationTrain(id: "RHBRE87668", name: "RHB RE87668", colour: .blue, from: Town(id: "29339230", name: "Bergün", coordinates: [46.620553, 9.752464]), to: Town(id: "29309230", name: "Preda", coordinates: [46.588862, 9.775371]), coordinates: [[46.624910, 9.751958]], timeIntervals: [[9,5]], type: .rail), 
+        LocationTrain(id: "RHBRE87668", name: "RHB RE87668", colour: .blue, from: Town(id: "29339230", name: "Bergün", coordinates: [46.620553, 9.752464]), to: Town(id: "29309230", name: "Preda", coordinates: [46.588862, 9.775371]), coordinates: [[46.624910, 9.751958]], timeIntervals: [[9,5]], type: .rail),
     ]
     
     let locationsStation: [Town] = [Town(id: "RHBBERGUN", name: "RHB Berguen", coordinates: [46.631158, 9.746958])]
@@ -39,7 +39,7 @@ struct ContentView: View {
         Map(position: $position, selection: $selectedItem) {
 
             ForEach(websocket.locations) { train in
-                Marker("\(train.name) with type: \(train.type)", systemImage: train.type == .bus ? "bus.fill" : "train.side.front.car", coordinate: coordinate(train.currentCoordinates))
+                Marker(train.name, systemImage: train.type.description, coordinate: coordinate(train.currentCoordinates))
                     .tint(.blue)
                     .tag(train.id)
             }
