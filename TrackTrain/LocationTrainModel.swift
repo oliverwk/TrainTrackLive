@@ -10,7 +10,11 @@ import SwiftUI
 import MapKit
 
 struct LocationTrain: Identifiable, Equatable, CustomStringConvertible {
-    init(id: String, name: String, colour: Color, from: Town? = nil, to: Town? = nil, coordinates: [[Float]], timeIntervals: [[Int?]], stops: TrainStopContent? = nil, type: TrainType) {
+    static func == (lhs: LocationTrain, rhs: LocationTrain) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    init(id: String, name: String, colour: Color, from: Town? = nil, to: Town? = nil, coordinates: [[Float]], timeIntervals: [[Int?]], stops: TrainStopContent? = nil, type: TrainType, trajectoryExpanded: [CLLocationCoordinate2D] = []) {
         self.id = id
         self.name = name
         self.colour = colour
@@ -20,13 +24,14 @@ struct LocationTrain: Identifiable, Equatable, CustomStringConvertible {
         self.coordinates = coordinates
         self.timeIntervals = timeIntervals
         self.type = type
+        self.trajectoryExpanded = trajectoryExpanded
     }
     var description: String {
         return "{ id: \(id), name: \(name), colour: \(colour), currentCoordinates: \(currentCoordinates), coordinates: \(coordinates), timeIntervals: \(timeIntervals), coordinatesSwiftui: \(coordinatesSwiftUI), coordinateMap: \(coordinateGeo), coordinatesMap: \(coordinatesGeo) }"
     }
     
     let id: String
-    let name: String
+    var name: String
     let colour: Color
     let type: TrainType
     let from: Town?
@@ -34,6 +39,7 @@ struct LocationTrain: Identifiable, Equatable, CustomStringConvertible {
     var stops: TrainStopContent?
     var coordinates: [[Float]]
     let timeIntervals: [[Int?]]
+    var trajectoryExpanded: [CLLocationCoordinate2D]
     
     var currentCoordinates: [Float] {
         // https://pub.tik.ee.ethz.ch/students/2022-FS/SA-2022-24.pdf
@@ -54,13 +60,24 @@ struct LocationTrain: Identifiable, Equatable, CustomStringConvertible {
         return epsg3857toEpsg4326(coordinates[Int(index)])
     }
     
+    //TODO: this doesn't work, but fix it with a diffrent variabel in the contentView class
     var trajectory: [CLLocationCoordinate2D] {
-        var tar: [CLLocationCoordinate2D] = []
-        for cordGeo in coordinates {
-            let cord = epsg3857toEpsg4326(cordGeo)
-            tar.append(coordinate(cord))
+        get  {
+            if (trajectoryExpanded.count != 0) {
+                return trajectoryExpanded
+            } else {
+                var tar: [CLLocationCoordinate2D] = []
+                for cordGeo in coordinates {
+                    let cord = epsg3857toEpsg4326(cordGeo)
+                    tar.append(coordinate(cord))
+                }
+                return tar
+            }
         }
-        return tar
+        set (newValue) {
+            trajectoryExpanded = newValue
+        }
+        
     }
     
     var coordinatesSwiftUI: CLLocationCoordinate2D {
@@ -106,7 +123,7 @@ enum TrainType: CustomStringConvertible {
         case .bus: return "bus.fill"
         case .tram: return "tram.fill"
         case .cablecar: return "cablecar"
-        case .gondola: return "cabelcar"
+        case .gondola: return "cablecar"
         case .funicular: return "tram.fill.tunnel"
         }
       }
