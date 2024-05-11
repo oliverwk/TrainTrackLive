@@ -53,27 +53,16 @@ func epsg4326toEpsg3857(_ coordinates: [Float]) -> [Float] {
 
 extension Color {
     init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let a, r, g, b: UInt64
-        switch hex.count {
-        case 3: // RGB (12-bit)
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (a, r, g, b) = (1, 1, 1, 0)
-        }
+        let r = UInt8(strtoul(String(hex.prefix(2)), nil, 16))
+               let g = UInt8(strtoul(String(hex.suffix(4).prefix(2)), nil, 16))
+               let b = UInt8(strtoul(String(hex.suffix(2)), nil, 16))
         
         self.init(
             .sRGB,
             red: Double(r) / 255,
             green: Double(g) / 255,
             blue:  Double(b) / 255,
-            opacity: Double(a) / 255
+            opacity: 1
         )
     }
 }
@@ -164,6 +153,12 @@ extension Data {
     }
 }
 
+extension [Int] {
+    var floats: [Float]? {
+        return [Float(self[0]), Float(self[1])]
+    }
+}
+
 let ALBULA_TUNNEL_PENDING = """
 {"state":"PENDING","formation_id":null,"arrivalDelay":null,"arrivalTime":null,"aimedArrivalTime":null,"cancelled":false,"departureDelay":null,"departureTime":null,"aimedDepartureTime":null,"noDropOff":true,"noPickUp":true,"stationId":null,"stationName":"Albulatunnel","coordinate":[1092194,5872816],"platform":null},
 """
@@ -180,9 +175,9 @@ func coordinate(_ lat: Float, _ long: Float) -> CLLocationCoordinate2D {
 }
 
 func getTrain(_ trainlist: [LocationTrain], _ trainid: String) -> LocationTrain? {
-    if let trainWithId = trainlist.first(where: {$0.id == trainid}) {
+    if let indexTrainWithId = trainlist.firstIndex(where: {$0.id == trainid}) {
        // it exists, do something
-        return trainWithId
+        return trainlist[indexTrainWithId]
     } else {
        //item could not be found
         return nil
@@ -193,12 +188,12 @@ func createBoundBox(_ location: MKCoordinateRegion) -> String {
     let linksCord = Float(location.center.longitude-location.span.longitudeDelta)
     let bendenCord = Float(location.center.latitude-location.span.latitudeDelta)
     let linksBenedenCord = epsg4326toEpsg3857([linksCord, bendenCord])
-    let linksBenedenString = "\(linksBenedenCord[0]) \(linksBenedenCord[1])"
+    let linksBenedenString = "\(Int(linksBenedenCord[0])) \(Int(linksBenedenCord[1]))"
     
     let rechtsCord = Float(location.center.longitude+location.span.longitudeDelta)
     let bovenCord = Float(location.center.latitude+location.span.latitudeDelta)
     let rechtsBovenCord = epsg4326toEpsg3857([rechtsCord, bovenCord])
-    let rechtsBovenString = "\(rechtsBovenCord[0]) \(rechtsBovenCord[1])"
+    let rechtsBovenString = "\(Int(rechtsBovenCord[0])) \(Int(rechtsBovenCord[1]))"
     return "\(linksBenedenString) \(rechtsBovenString)"
 }
 
