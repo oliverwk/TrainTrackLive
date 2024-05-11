@@ -33,10 +33,11 @@ struct TrainStopContent: Codable, Equatable, Identifiable {
     let newDestination: String?
     let longName, routeIdentifier, shortName, type: String
     let stations: [TrainStopStation]
-    let tenant, publisher: String
-    let publisherURL: String
+    let tenant: String
+    let publisher: String?
+    let publisherURL: String?
     let contentOperator: String
-    let operatorURL: String
+    let operatorURL: String?
     let license, licenseURL, licenseNote: String?
 
     enum CodingKeys: String, CodingKey {

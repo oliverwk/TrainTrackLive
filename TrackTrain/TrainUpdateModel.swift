@@ -69,6 +69,7 @@ struct Properties: Codable {
     let timeSinceUpdate: Int?
     let hasRealtime, hasRealtimeJourney: Bool
     let operatorProvidesRealtimeJourney: OperatorProvidesRealtimeJourney
+    let contentOperator: String?
     let hasJourney: Bool
     let routeIdentifier: String
     let delay: Int?
@@ -83,6 +84,7 @@ struct Properties: Codable {
         case eventTimestamp = "event_timestamp"
         case line, timestamp, state
         case timeSinceUpdate = "time_since_update"
+        case contentOperator = "operator"
         case hasRealtime = "has_realtime"
         case hasRealtimeJourney = "has_realtime_journey"
         case operatorProvidesRealtimeJourney = "operator_provides_realtime_journey"
