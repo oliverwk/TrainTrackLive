@@ -18,6 +18,7 @@
 		E6A0EAEF2BC596D3001493B5 /* TrainStopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A0EAEE2BC596D3001493B5 /* TrainStopModel.swift */; };
 		E6A0EAF12BC5A106001493B5 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A0EAF02BC5A106001493B5 /* BottomView.swift */; };
 		E6EA76EF2BC70B90006CF201 /* TrainUpdateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EA76EE2BC70B90006CF201 /* TrainUpdateModel.swift */; };
+		E6EA76F12BC97731006CF201 /* TrainTrajectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EA76F02BC97731006CF201 /* TrainTrajectory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		E6A0EAEE2BC596D3001493B5 /* TrainStopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainStopModel.swift; sourceTree = "<group>"; };
 		E6A0EAF02BC5A106001493B5 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
 		E6EA76EE2BC70B90006CF201 /* TrainUpdateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainUpdateModel.swift; sourceTree = "<group>"; };
+		E6EA76F02BC97731006CF201 /* TrainTrajectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainTrajectory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				E66443E92BC15B7E00A0AA81 /* ContentView.swift */,
 				E6A0EAF02BC5A106001493B5 /* BottomView.swift */,
 				E6A0EAEC2BC59627001493B5 /* TrainWebsocket.swift */,
+				E6EA76F02BC97731006CF201 /* TrainTrajectory.swift */,
 				E6A0EAEE2BC596D3001493B5 /* TrainStopModel.swift */,
 				E6EA76EE2BC70B90006CF201 /* TrainUpdateModel.swift */,
 				E66443F62BC15DE300A0AA81 /* LocationTrainModel.swift */,
@@ -169,6 +172,7 @@
 				E6A0EAF12BC5A106001493B5 /* BottomView.swift in Sources */,
 				E66443EA2BC15B7E00A0AA81 /* ContentView.swift in Sources */,
 				E66443E82BC15B7E00A0AA81 /* TrackTrainApp.swift in Sources */,
+				E6EA76F12BC97731006CF201 /* TrainTrajectory.swift in Sources */,
 				E66443F92BC15E0300A0AA81 /* Helper.swift in Sources */,
 				E6A0EAEF2BC596D3001493B5 /* TrainStopModel.swift in Sources */,
 			);
