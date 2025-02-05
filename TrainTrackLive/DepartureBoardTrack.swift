@@ -165,7 +165,7 @@ class TrainDepartures: ObservableObject {
             self.logger.log("The response of the trains is good")
             DispatchQueue.main.async {
                 self.departures = decodedLists.stationboard
-                for _ in 0...decodedLists.stationboard.count {
+                for _ in 0..<decodedLists.stationboard.count {
                     self.actis.append(nil)
                 }
             }

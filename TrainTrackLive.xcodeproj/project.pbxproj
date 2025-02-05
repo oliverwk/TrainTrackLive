@@ -19,6 +19,8 @@
 		E634D3492A7F0C9F004B877E /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A202A771009006816FE /* Helper.swift */; };
 		E653C9772A7E3BAC0007596E /* DepartureBoardTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653C9762A7E3BAC0007596E /* DepartureBoardTrack.swift */; };
 		E653C9792A7E40300007596E /* TrainDepartureBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653C9782A7E40300007596E /* TrainDepartureBoard.swift */; };
+		E668495B2BF0B1E800BB2A3F /* TrainTrackLiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E668495A2BF0B1E800BB2A3F /* TrainTrackLiveUITests.swift */; };
+		E668495D2BF0B1E800BB2A3F /* TrainTrackLiveUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E668495C2BF0B1E800BB2A3F /* TrainTrackLiveUITestsLaunchTests.swift */; };
 		E6BF0A122A770FF2006816FE /* TrainTrackLiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A112A770FF2006816FE /* TrainTrackLiveApp.swift */; };
 		E6BF0A142A770FF2006816FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A132A770FF2006816FE /* ContentView.swift */; };
 		E6BF0A162A770FF4006816FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6BF0A152A770FF4006816FE /* Assets.xcassets */; };
@@ -30,6 +32,8 @@
 		E6BF0A292A7710CE006816FE /* TrainWebsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */; };
 		E6C9C8B02A82D30100F8402A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E6C9C8AF2A82D30100F8402A /* Settings.bundle */; };
 		E6C9C8B22A82DEA200F8402A /* DepartureBoardTrackExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C9C8B12A82DEA200F8402A /* DepartureBoardTrackExtended.swift */; };
+		E6FDA5232D44EE9700499605 /* StravaHealth.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FDA5222D44EE9700499605 /* StravaHealth.swift */; };
+		E6FDA5252D450ABF00499605 /* stravaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FDA5242D450ABF00499605 /* stravaModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +43,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = E634D32E2A7EF0A9004B877E;
 			remoteInfo = TrainTrackWidgetExtension;
+		};
+		E668495E2BF0B1E800BB2A3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E6BF0A062A770FF2006816FE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E6BF0A0D2A770FF2006816FE;
+			remoteInfo = TrainTrackLive;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -68,6 +79,9 @@
 		E634D3462A7EF0E2004B877E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E653C9762A7E3BAC0007596E /* DepartureBoardTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureBoardTrack.swift; sourceTree = "<group>"; };
 		E653C9782A7E40300007596E /* TrainDepartureBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainDepartureBoard.swift; sourceTree = "<group>"; };
+		E66849582BF0B1E800BB2A3F /* TrainTrackLiveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrainTrackLiveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E668495A2BF0B1E800BB2A3F /* TrainTrackLiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainTrackLiveUITests.swift; sourceTree = "<group>"; };
+		E668495C2BF0B1E800BB2A3F /* TrainTrackLiveUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainTrackLiveUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E6BF0A0E2A770FF2006816FE /* TrainTrackLive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainTrackLive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6BF0A112A770FF2006816FE /* TrainTrackLiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainTrackLiveApp.swift; sourceTree = "<group>"; };
 		E6BF0A132A770FF2006816FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -81,6 +95,8 @@
 		E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainWebsocket.swift; sourceTree = "<group>"; };
 		E6C9C8AF2A82D30100F8402A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		E6C9C8B12A82DEA200F8402A /* DepartureBoardTrackExtended.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureBoardTrackExtended.swift; sourceTree = "<group>"; };
+		E6FDA5222D44EE9700499605 /* StravaHealth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaHealth.swift; sourceTree = "<group>"; };
+		E6FDA5242D450ABF00499605 /* stravaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = stravaModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +106,13 @@
 			files = (
 				E634D3342A7EF0A9004B877E /* SwiftUI.framework in Frameworks */,
 				E634D3322A7EF0A9004B877E /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E66849552BF0B1E800BB2A3F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,12 +147,22 @@
 			path = TrainTrackWidget;
 			sourceTree = "<group>";
 		};
+		E66849592BF0B1E800BB2A3F /* TrainTrackLiveUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E668495A2BF0B1E800BB2A3F /* TrainTrackLiveUITests.swift */,
+				E668495C2BF0B1E800BB2A3F /* TrainTrackLiveUITestsLaunchTests.swift */,
+			);
+			path = TrainTrackLiveUITests;
+			sourceTree = "<group>";
+		};
 		E6BF0A052A770FF2006816FE = {
 			isa = PBXGroup;
 			children = (
 				E6C9C8AF2A82D30100F8402A /* Settings.bundle */,
 				E6BF0A102A770FF2006816FE /* TrainTrackLive */,
 				E634D3352A7EF0A9004B877E /* TrainTrackWidget */,
+				E66849592BF0B1E800BB2A3F /* TrainTrackLiveUITests */,
 				E634D3302A7EF0A9004B877E /* Frameworks */,
 				E6BF0A0F2A770FF2006816FE /* Products */,
 			);
@@ -140,6 +173,7 @@
 			children = (
 				E6BF0A0E2A770FF2006816FE /* TrainTrackLive.app */,
 				E634D32F2A7EF0A9004B877E /* TrainTrackWidgetExtension.appex */,
+				E66849582BF0B1E800BB2A3F /* TrainTrackLiveUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,6 +184,8 @@
 				E634D3462A7EF0E2004B877E /* Info.plist */,
 				E6BF0A112A770FF2006816FE /* TrainTrackLiveApp.swift */,
 				E6BF0A132A770FF2006816FE /* ContentView.swift */,
+				E6FDA5222D44EE9700499605 /* StravaHealth.swift */,
+				E6FDA5242D450ABF00499605 /* stravaModel.swift */,
 				E6BF0A222A771019006816FE /* KaartTrain.swift */,
 				E6BF0A282A7710CE006816FE /* TrainWebsocket.swift */,
 				E6BF0A262A7710AA006816FE /* LocationTrain.swift */,
@@ -193,6 +229,24 @@
 			productReference = E634D32F2A7EF0A9004B877E /* TrainTrackWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		E66849572BF0B1E800BB2A3F /* TrainTrackLiveUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E66849602BF0B1E800BB2A3F /* Build configuration list for PBXNativeTarget "TrainTrackLiveUITests" */;
+			buildPhases = (
+				E66849542BF0B1E800BB2A3F /* Sources */,
+				E66849552BF0B1E800BB2A3F /* Frameworks */,
+				E66849562BF0B1E800BB2A3F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E668495F2BF0B1E800BB2A3F /* PBXTargetDependency */,
+			);
+			name = TrainTrackLiveUITests;
+			productName = TrainTrackLiveUITests;
+			productReference = E66849582BF0B1E800BB2A3F /* TrainTrackLiveUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		E6BF0A0D2A770FF2006816FE /* TrainTrackLive */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E6BF0A1D2A770FF4006816FE /* Build configuration list for PBXNativeTarget "TrainTrackLive" */;
@@ -219,11 +273,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					E634D32E2A7EF0A9004B877E = {
 						CreatedOnToolsVersion = 14.3.1;
+					};
+					E66849572BF0B1E800BB2A3F = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = E6BF0A0D2A770FF2006816FE;
 					};
 					E6BF0A0D2A770FF2006816FE = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -245,6 +303,7 @@
 			targets = (
 				E6BF0A0D2A770FF2006816FE /* TrainTrackLive */,
 				E634D32E2A7EF0A9004B877E /* TrainTrackWidgetExtension */,
+				E66849572BF0B1E800BB2A3F /* TrainTrackLiveUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -255,6 +314,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E634D33D2A7EF0AB004B877E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E66849562BF0B1E800BB2A3F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,10 +349,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E66849542BF0B1E800BB2A3F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E668495B2BF0B1E800BB2A3F /* TrainTrackLiveUITests.swift in Sources */,
+				E668495D2BF0B1E800BB2A3F /* TrainTrackLiveUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E6BF0A0A2A770FF2006816FE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6FDA5252D450ABF00499605 /* stravaModel.swift in Sources */,
+				E6FDA5232D44EE9700499605 /* StravaHealth.swift in Sources */,
 				E6BF0A232A771019006816FE /* KaartTrain.swift in Sources */,
 				E634D3482A7F040B004B877E /* TrainTrackWidgetLiveActivity.swift in Sources */,
 				E6BF0A292A7710CE006816FE /* TrainWebsocket.swift in Sources */,
@@ -308,6 +385,11 @@
 			isa = PBXTargetDependency;
 			target = E634D32E2A7EF0A9004B877E /* TrainTrackWidgetExtension */;
 			targetProxy = E634D33F2A7EF0AB004B877E /* PBXContainerItemProxy */;
+		};
+		E668495F2BF0B1E800BB2A3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E6BF0A0D2A770FF2006816FE /* TrainTrackLive */;
+			targetProxy = E668495E2BF0B1E800BB2A3F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -373,10 +455,58 @@
 			};
 			name = Release;
 		};
+		E66849612BF0B1E800BB2A3F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6CDWQZK7UX;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.wittopkoning.TrainTrackLiveUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TrainTrackLive;
+			};
+			name = Debug;
+		};
+		E66849622BF0B1E800BB2A3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6CDWQZK7UX;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.wittopkoning.TrainTrackLiveUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TrainTrackLive;
+			};
+			name = Release;
+		};
 		E6BF0A1B2A770FF4006816FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -406,9 +536,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -435,6 +567,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -464,9 +597,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -485,12 +620,12 @@
 		E6BF0A1E2A770FF4006816FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TrainTrackLive/TrainTrackLive.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"TrainTrackLive/Preview Content\"";
 				DEVELOPMENT_TEAM = 6CDWQZK7UX;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -499,6 +634,9 @@
 				INFOPLIST_FILE = TrainTrackLive/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Train Track Live";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We analyse data";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Wij hebben data analyseren";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Wij hebben uw locatie nodig om de treinen bij u in de buurt te laten zien";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -527,12 +665,12 @@
 		E6BF0A1F2A770FF4006816FE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TrainTrackLive/TrainTrackLive.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"TrainTrackLive/Preview Content\"";
 				DEVELOPMENT_TEAM = 6CDWQZK7UX;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -541,6 +679,9 @@
 				INFOPLIST_FILE = TrainTrackLive/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Train Track Live";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We analyse data";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Wij hebben data analyseren";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Wij hebben uw locatie nodig om de treinen bij u in de buurt te laten zien";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -574,6 +715,15 @@
 			buildConfigurations = (
 				E634D3432A7EF0AB004B877E /* Debug */,
 				E634D3442A7EF0AB004B877E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E66849602BF0B1E800BB2A3F /* Build configuration list for PBXNativeTarget "TrainTrackLiveUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E66849612BF0B1E800BB2A3F /* Debug */,
+				E66849622BF0B1E800BB2A3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

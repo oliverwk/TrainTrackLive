@@ -33,6 +33,12 @@ struct ContentView: View {
                     .background(.green)
                     .foregroundStyle(.white)
                     .cornerRadius(7)
+                NavigationLink("HK Strava") {
+                    StravaHealth()
+                }.padding(9)
+                    .background(.yellow)
+                    .foregroundStyle(.white)
+                    .cornerRadius(7)
             }
         }
     }
