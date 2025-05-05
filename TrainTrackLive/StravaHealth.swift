@@ -16,10 +16,12 @@ struct StravaHealth: View {
     @State var authenticated = false
     @State var trigger = false
     let healthStore = HKHealthStore()
-    @State var stepCountToday = [1,2,3,4,5,6,7,8]
+    @State var stepCountToday = [1,2,3,4,5,6,7]
     @State var works: [Works] = []
     @State var sWorks: [SWork] = []
-    
+    @State var wkType: HKWorkoutActivityType = .running
+    @State var wkQauntType : HKQuantityTypeIdentifier = .distanceWalkingRunning
+    @State var totQaunt: Double = 0
     
     @State var mapsAdded = 0
     @State var woksAdded = 0
@@ -63,8 +65,9 @@ struct StravaHealth: View {
     ]
     
     func readWorkouts() async -> [HKWorkout]? {
-        let running = HKQuery.predicateForWorkouts(with: .running)
-        
+        // let running = HKQuery.predicateForWorkouts(with: .running)
+        let running = HKQuery.predicateForWorkouts(with: wkType)
+
         let samples = try! await withCheckedThrowingContinuation { (continuation: CheckedContinuation<[HKSample], Error>) in
             healthStore.execute(HKSampleQuery(sampleType: .workoutType(), predicate: running, limit: HKObjectQueryNoLimit,sortDescriptors: [.init(keyPath: \HKSample.startDate, ascending: false)], resultsHandler: { query, samples, error in
                 if let hasError = error {
@@ -212,10 +215,12 @@ struct StravaHealth: View {
             Sname = "Early Morning Run"
         }
         
-        let distance = wok?.statistics(for: .init(.distanceWalkingRunning))?.sumQuantity()?.doubleValue(for: HKUnit.meter())
+        //let distance = wok?.statistics(for: .init(.distanceWalkingRunning))?.sumQuantity()?.doubleValue(for: HKUnit.meter())
+        let distance = wok?.statistics(for: .init(wkQauntType))?.sumQuantity()?.doubleValue(for: HKUnit.meter())
+
         let sDate = (wok?.startDate.ISO8601Format())!
         let dur = wok?.duration
-        let swork = SWork(name: Sname, start_date_local: sDate, elapsed_time: Int(dur!), distance: distance!, cords: [])
+        let swork = SWork(name: Sname, start_date_local: sDate, elapsed_time: Int(dur!), distance: distance ?? 0, cords: [])
         sWorks.append(swork)
         woksAdded += 1
         
@@ -236,8 +241,114 @@ struct StravaHealth: View {
     }
     
     var body: some View {
-        Text("Hello you have \(stepCountToday) steps")
+        
+        Text("\(stepCountToday) steps and total: \(round(totQaunt / 1000)) km")
             .padding(5)
+        HStack {
+            Picker("Select Type", selection: $wkType) {
+                ForEach(1...84, id: \.self) { atype in
+                    Text(HKWorkoutActivityType.name(for: HKWorkoutActivityType(rawValue: UInt(atype))!)).tag(HKWorkoutActivityType(rawValue: UInt(atype))!)
+                }
+            }
+            .pickerStyle(.menu)
+            
+            Picker("Select Quantity", selection: $wkQauntType) {
+                ForEach(0...(HKQuantityTypeIdentifier.allCases.count-1), id: \.self) { i_qtype in
+                    Text("\(HKQuantityTypeIdentifier.myCases[i_qtype])").tag(HKQuantityTypeIdentifier.allCases[i_qtype])
+                }
+            }
+            .pickerStyle(.menu)
+        }
+       
+        
+        ProgressView(value: Float(woksAdded), total: Float(woksAdded.words.count))
+            .padding(10)
+        ProgressView(value: Float(mapsAdded), total: Float(woksAdded.words.count))
+            .padding(10)
+            .tint(.green)
+        ProgressView(value: Float(stravasAdded), total: Float(woksAdded.words.count))
+            .padding(10)
+            .tint(.orange)
+        List(works.indices, id: \.self) { idx in
+            VStack {
+                Text(works[idx].text)
+                
+                if works[idx].polyline != nil {
+                    if #available(iOS 17.0, *) {
+                        Map(interactionModes: []) {
+                            MapPolyline(coordinates: works[idx].polyline ?? [])
+                                .stroke(.blue, lineWidth: 3)
+                        }
+                        .frame(height: 250)
+                    } else {
+                        Text("Not iOS 17.0")
+                        // Fallback on earlier versions
+                    }
+                } else {
+                    Button("Get map") {
+                        Task {
+                            await getLocationDataForRoute(idx: idx)
+                        }
+                    }
+                }
+            }
+        }
+        
+        if #available(iOS 17.0, *) {
+            Button("Access health data") {
+                // OK to read or write HealthKit data here.
+                readStepCountThisWeek()
+            }
+            .disabled(!authenticated)
+            
+            // If HealthKit data is available, request authorization
+            // when this view appears.
+            .onAppear {
+                
+                // Check that Health data is available on the device.
+                if HKHealthStore.isHealthDataAvailable() {
+                    // Modifying the trigger initiates the health data
+                    // access request.
+                    trigger.toggle()
+                }
+            }
+            
+            // Requests access to share and read HealthKit data types
+            // when the trigger changes.
+            .healthDataAccessRequest(store: healthStore,
+                                     shareTypes: allTypes,
+                                     readTypes: allTypes,
+                                     trigger: trigger) { result in
+                switch result {
+                    
+                case .success(_):
+                    authenticated = true
+                case .failure(let error):
+                    // Handle the error here.
+                    fatalError("*** An error occurred while requesting authentication: \(error) ***")
+                }
+            }.padding(5)
+        } else {
+            // Fallback on earlier versions
+            Text("No ios 17")
+        }
+        Button("Get workouts") {
+            Task {
+                totQaunt = 0
+                let routes = await readWorkouts()
+                for number in 0..<routes!.count {
+                    let wok = routes?[number]
+                    print("on \(String(describing: wok?.endDate.formatted(.dateTime))) with duration \(String(format: "%.1f", (wok?.duration ?? 0.0)/60)) min and nr \(number) and \(String(describing: wok?.allStatistics))")
+                    let distance = wok?.statistics(for: .init(wkQauntType))?.sumQuantity()
+                    totQaunt += distance?.doubleValue(for: HKUnit.meter()) ?? 0
+                    let cals = wok?.statistics(for: .init(.activeEnergyBurned))?.sumQuantity()
+                    works.append(Works(text: "Distance is \(Int(distance?.doubleValue(for: HKUnit.meter()) ?? 0.0)/1000) km with duration \(String(format: "%.1f", (wok?.duration ?? 0.0)/60)) min on \(wok?.endDate.formatted(.dateTime) ?? Date().formatted(.dateTime)) and burned \(Int(cals?.doubleValue(for: HKUnit.largeCalorie()) ?? 0.0)) kcals", work: wok!))
+                    AddToSWorks(wok: wok, idx: number)
+                    
+                }
+                
+            }
+        }.padding(5)
         Button("Convert to Strava") {
             let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
             let documentsDirectory = paths[0]
@@ -251,9 +362,9 @@ struct StravaHealth: View {
                 }
             }
             
-            //for idx in 15..<sWorks.count { // make sure that only data from before 14-12-2024 (that is index 14 and higher) is entreted into the gpx file
-            if true {
-                let idx = 1
+            for idx in 0..<sWorks.count { // make sure that only data from before 14-12-2024 (that is index 14 and higher) is entreted into the gpx file
+            //let idx = 0
+            //if true {
             // reset the string with at each new workout
                     gpxString = """
                  <?xml version="1.0" encoding="UTF-8"?>
@@ -319,93 +430,8 @@ struct StravaHealth: View {
             }
             btncl = .orange
         }
+        .padding(5)
         .tint(btncl)
-        ProgressView(value: Float(woksAdded), total: 203.0)
-            .padding(10)
-        ProgressView(value: Float(mapsAdded), total: 203.0)
-            .padding(10)
-            .tint(.green)
-        ProgressView(value: Float(stravasAdded), total: 203.0)
-            .padding(10)
-            .tint(.orange)
-        List(works.indices, id: \.self) { idx in
-            VStack {
-                Text(works[idx].text)
-                
-                if works[idx].polyline != nil {
-                    if #available(iOS 17.0, *) {
-                        Map(interactionModes: []) {
-                            MapPolyline(coordinates: works[idx].polyline ?? [])
-                                .stroke(.blue, lineWidth: 3)
-                        }
-                        .frame(height: 250)
-                    } else {
-                        Text("Not iOS 17.0")
-                        // Fallback on earlier versions
-                    }
-                } else {
-                    Button("Get map") {
-                        Task {
-                            await getLocationDataForRoute(idx: idx)
-                        }
-                    }
-                }
-            }
-        }
-        Button("Get workouts") {
-            Task {
-                let routes = await readWorkouts()
-                for number in 0..<routes!.count {
-                    let wok = routes?[number]
-                    print("on \(String(describing: wok?.endDate.formatted(.dateTime))) with duration \(String(format: "%.1f", (wok?.duration ?? 0.0)/60)) min and nr \(number) and \(String(describing: wok?.allStatistics))")
-                    let distance = wok?.statistics(for: .init(.distanceWalkingRunning))?.sumQuantity()
-                    let cals = wok?.statistics(for: .init(.activeEnergyBurned))?.sumQuantity()
-                    works.append(Works(text: "Distance is \(Int(distance?.doubleValue(for: HKUnit.meter()) ?? 0.0)/1000) km with duration \(String(format: "%.1f", (wok?.duration ?? 0.0)/60)) min on \(wok?.endDate.formatted(.dateTime) ?? Date().formatted(.dateTime)) and burned \(Int(cals?.doubleValue(for: HKUnit.largeCalorie()) ?? 0.0)) kcals", work: wok!))
-                    AddToSWorks(wok: wok, idx: number)
-                    
-                }
-                
-            }
-        }
-        
-        if #available(iOS 17.0, *) {
-            Button("Access health data") {
-                // OK to read or write HealthKit data here.
-                readStepCountThisWeek()
-            }
-            .disabled(!authenticated)
-            
-            // If HealthKit data is available, request authorization
-            // when this view appears.
-            .onAppear {
-                
-                // Check that Health data is available on the device.
-                if HKHealthStore.isHealthDataAvailable() {
-                    // Modifying the trigger initiates the health data
-                    // access request.
-                    trigger.toggle()
-                }
-            }
-            
-            // Requests access to share and read HealthKit data types
-            // when the trigger changes.
-            .healthDataAccessRequest(store: healthStore,
-                                     shareTypes: allTypes,
-                                     readTypes: allTypes,
-                                     trigger: trigger) { result in
-                switch result {
-                    
-                case .success(_):
-                    authenticated = true
-                case .failure(let error):
-                    // Handle the error here.
-                    fatalError("*** An error occurred while requesting authentication: \(error) ***")
-                }
-            }
-        } else {
-            // Fallback on earlier versions
-            Text("No ios 17")
-        }
     }
     
     func getDocumentsDirectory() -> URL {
@@ -468,6 +494,105 @@ struct StravaHealth: View {
     
 }
 
+extension HKQuantityTypeIdentifier: @retroactive CaseIterable {
+    public static var myCases: [String] = ["appleSleepingWristTemperature","bodyFatPercentage","bodyMass","bodyMassIndex","electrodermalActivity","height","leanBodyMass","waistCircumference","activeEnergyBurned","appleExerciseTime","appleMoveTime","appleStandTime","basalEnergyBurned","crossCountrySkiingSpeed","cyclingCadence","cyclingFunctionalThresholdPower","cyclingPower","cyclingSpeed","distanceCrossCountrySkiing","distanceCycling","distanceDownhillSnowSports","distancePaddleSports","distanceRowing","distanceSkatingSports","distanceSwimming","distanceWalkingRunning","distanceWheelchair","estimatedWorkoutEffortScore","flightsClimbed","nikeFuel","paddleSportsSpeed","physicalEffort","pushCount","rowingSpeed","runningPower","runningSpeed","stepCount","swimmingStrokeCount","underwaterDepth","workoutEffortScore","environmentalAudioExposure","environmentalSoundReduction","headphoneAudioExposure","atrialFibrillationBurden","heartRate","heartRateRecoveryOneMinute","heartRateVariabilitySDNN","peripheralPerfusionIndex","restingHeartRate","vo2Max","walkingHeartRateAverage","appleWalkingSteadiness","runningGroundContactTime","runningStrideLength","runningVerticalOscillation","sixMinuteWalkTestDistance","stairAscentSpeed","stairDescentSpeed","walkingAsymmetryPercentage","walkingDoubleSupportPercentage","walkingSpeed","walkingStepLength","dietaryBiotin","dietaryCaffeine","dietaryCalcium","dietaryCarbohydrates","dietaryChloride","dietaryCholesterol","dietaryChromium","dietaryCopper","dietaryEnergyConsumed","dietaryFatMonounsaturated","dietaryFatPolyunsaturated","dietaryFatSaturated","dietaryFatTotal","dietaryFiber","dietaryFolate","dietaryIodine","dietaryIron","dietaryMagnesium","dietaryManganese","dietaryMolybdenum","dietaryNiacin","dietaryPantothenicAcid","dietaryPhosphorus","dietaryPotassium","dietaryProtein","dietaryRiboflavin","dietarySelenium","dietarySodium","dietarySugar","dietaryThiamin","dietaryVitaminA","dietaryVitaminB12","dietaryVitaminB6","dietaryVitaminC","dietaryVitaminD","dietaryVitaminE","dietaryVitaminK","dietaryWater","dietaryZinc","bloodAlcoholContent","bloodPressureDiastolic","bloodPressureSystolic","insulinDelivery","numberOfAlcoholicBeverages","numberOfTimesFallen","timeInDaylight","uvExposure","waterTemperature","basalBodyTemperature","appleSleepingBreathingDisturbances","forcedExpiratoryVolume1","forcedVitalCapacity","inhalerUsage","oxygenSaturation","peakExpiratoryFlowRate","respiratoryRate","bloodGlucose","bodyTemperature"]
+    public static var allCases: [HKQuantityTypeIdentifier] {
+        return [HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierAppleSleepingWristTemperature"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierBodyFatPercentage"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierBodyMass"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierBodyMassIndex"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierElectrodermalActivity"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierHeight"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierLeanBodyMass"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierWaistCircumference"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierActiveEnergyBurned"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierAppleExerciseTime"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierAppleMoveTime"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierAppleStandTime"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierBasalEnergyBurned"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierCrossCountrySkiingSpeed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierCyclingCadence"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierCyclingFunctionalThresholdPower"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierCyclingPower"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierCyclingSpeed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDistanceCrossCountrySkiing"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDistanceCycling"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDistanceDownhillSnowSports"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDistancePaddleSports"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDistanceRowing"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDistanceSkatingSports"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDistanceSwimming"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDistanceWalkingRunning"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDistanceWheelchair"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierEstimatedWorkoutEffortScore"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierFlightsClimbed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierNikeFuel"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierPaddleSportsSpeed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierPhysicalEffort"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierPushCount"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierRowingSpeed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierRunningPower"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierRunningSpeed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierStepCount"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierSwimmingStrokeCount"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierUnderwaterDepth"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierWorkoutEffortScore"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierEnvironmentalAudioExposure"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierEnvironmentalSoundReduction"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierHeadphoneAudioExposure"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierAtrialFibrillationBurden"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierHeartRate"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierHeartRateRecoveryOneMinute"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierHeartRateVariabilitySDNN"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierPeripheralPerfusionIndex"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierRestingHeartRate"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierVo2Max"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierWalkingHeartRateAverage"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierAppleWalkingSteadiness"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierRunningGroundContactTime"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierRunningStrideLength"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierRunningVerticalOscillation"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierSixMinuteWalkTestDistance"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierStairAscentSpeed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierStairDescentSpeed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierWalkingAsymmetryPercentage"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierWalkingDoubleSupportPercentage"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierWalkingSpeed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierWalkingStepLength"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryBiotin"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryCaffeine"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryCalcium"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryCarbohydrates"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryChloride"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryCholesterol"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryChromium"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryCopper"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryEnergyConsumed"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryFatMonounsaturated"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryFatPolyunsaturated"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryFatSaturated"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryFatTotal"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryFiber"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryFolate"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryIodine"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryIron"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryMagnesium"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryManganese"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryMolybdenum"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryNiacin"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryPantothenicAcid"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryPhosphorus"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryPotassium"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryProtein"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryRiboflavin"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietarySelenium"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietarySodium"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietarySugar"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryThiamin"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryVitaminA"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryVitaminB12"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryVitaminB6"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryVitaminC"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryVitaminD"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryVitaminE"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryVitaminK"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryWater"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierDietaryZinc"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierBloodAlcoholContent"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierBloodPressureDiastolic"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierBloodPressureSystolic"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierInsulinDelivery"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierNumberOfAlcoholicBeverages"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierNumberOfTimesFallen"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierTimeInDaylight"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierUvExposure"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierWaterTemperature"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierBasalBodyTemperature"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierAppleSleepingBreathingDisturbances"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierForcedExpiratoryVolume1"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierForcedVitalCapacity"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierInhalerUsage"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierOxygenSaturation"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierPeakExpiratoryFlowRate"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierRespiratoryRate"),HKQuantityTypeIdentifier(rawValue: "HKQuantityTypeIdentifierBloodGlucose")]
+    }
+}
+
+
+extension HKWorkoutActivityType {
+    static func name(for activityType: HKWorkoutActivityType) -> String {
+        switch activityType.rawValue {
+        case 1: return "American Football"
+        case 2: return "Archery"
+        case 3: return "Australian Football"
+        case 4: return "Badminton"
+        case 5: return "Baseball"
+        case 6: return "Basketball"
+        case 7: return "Bowling"
+        case 8: return "Boxing"
+        case 9: return "Climbing"
+        case 10: return "Cricket"
+        case 11: return "Cross Training"
+        case 12: return "Curling"
+        case 13: return "Cycling"
+        case 14: return "Dance"
+        case 15: return "Dance Inspired Training"
+        case 16: return "Elliptical"
+        case 17: return "Equestrian Sports"
+        case 18: return "Fencing"
+        case 19: return "Fishing"
+        case 20: return "Functional Strength Training"
+        case 21: return "Golf"
+        case 22: return "Gymnastics"
+        case 23: return "Handball"
+        case 24: return "Hiking"
+        case 25: return "Hockey"
+        case 26: return "Hunting"
+        case 27: return "Lacrosse"
+        case 28: return "Martial Arts"
+        case 29: return "Mind and Body"
+        case 30: return "Mixed Metabolic Cardio Training"
+        case 31: return "Paddle Sports"
+        case 32: return "Play"
+        case 33: return "Preparation and Recovery"
+        case 34: return "Racquetball"
+        case 35: return "Rowing"
+        case 36: return "Rugby"
+        case 37: return "Running"
+        case 38: return "Sailing"
+        case 39: return "Skating Sports"
+        case 40: return "Snow Sports"
+        case 41: return "Soccer"
+        case 42: return "Softball"
+        case 43: return "Squash"
+        case 44: return "Stair Climbing"
+        case 45: return "Surfing Sports"
+        case 46: return "Swimming"
+        case 47: return "Table Tennis"
+        case 48: return "Tennis"
+        case 49: return "Track and Field"
+        case 50: return "Traditional Strength Training"
+        case 51: return "Volleyball"
+        case 52: return "Walking"
+        case 53: return "Water Fitness"
+        case 54: return "Water Polo"
+        case 55: return "Water Sports"
+        case 56: return "Wrestling"
+        case 57: return "Yoga"
+        case 58: return "Barre"
+        case 59: return "Core Training"
+        case 60: return "Cross Country Skiing"
+        case 61: return "Downhill Skiing"
+        case 62: return "Flexibility"
+        case 63: return "High Intensity Interval Training"
+        case 64: return "Jump Rope"
+        case 65: return "Kickboxing"
+        case 66: return "Pilates"
+        case 67: return "Snowboarding"
+        case 68: return "Stairs"
+        case 69: return "Step Training"
+        case 70: return "Wheelchair Walk Pace"
+        case 71: return "Wheelchair Run Pace"
+        case 72: return "Tai Chi"
+        case 73: return "Mixed Cardio"
+        case 74: return "Hand Cycling"
+        case 75: return "Disc Sports"
+        case 76: return "Fitness Gaming"
+        case 77: return "Cardio Dance"
+        case 78: return "Social Dance"
+        case 79: return "Pickleball"
+        case 80: return "Cooldown"
+        case 82: return "Swim Bike Run"
+        case 83: return "Transition"
+        case 84: return "Underwater Diving"
+        case 3000: return "Other"
+        default: return "UNKNOWN"
+        }
+    }
+}
 
 #Preview {
     StravaHealth()
