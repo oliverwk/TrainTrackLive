@@ -11,24 +11,32 @@ import HealthKitUI
 import CoreLocation
 import MapKit
 
+import UniformTypeIdentifiers
+
+
 struct StravaHealth: View {
     
     @State var authenticated = false
     @State var trigger = false
     let healthStore = HKHealthStore()
-    @State var stepCountToday = [1,2,3,4,5,6,7]
+    @State var stepCountToday = []
     @State var works: [Works] = []
     @State var sWorks: [SWork] = []
     @State var wkType: HKWorkoutActivityType = .running
     @State var wkQauntType : HKQuantityTypeIdentifier = .distanceWalkingRunning
     @State var totQaunt: Double = 0
-    
+    @State  var activityonDate = Date.now
+
+    @State var swoksTBadded = 0
     @State var mapsAdded = 0
     @State var woksAdded = 0
     @State var stravasAdded = 0
     @State var btncl: Color = .blue
     @State var dateWithoutData = ""
+    @State private var showingExporter = false
+    @State private var doctoexport: TextFile = TextFile()
     
+
     @State var gpxwoks = []
     @State var gpxString = """
     <?xml version="1.0" encoding="UTF-8"?>
@@ -242,7 +250,7 @@ struct StravaHealth: View {
     
     var body: some View {
         
-        Text("\(stepCountToday) steps and total: \(round(totQaunt / 1000)) km")
+        Text("\(stepCountToday) steps and total: \(round(totQaunt / 1000)) km and avg \(totQaunt.int/(woksAdded+1)/1000) km")
             .padding(5)
         HStack {
             Picker("Select Type", selection: $wkType) {
@@ -259,14 +267,14 @@ struct StravaHealth: View {
             }
             .pickerStyle(.menu)
         }
-       
         
-        ProgressView(value: Float(woksAdded), total: Float(woksAdded.words.count))
+        
+        ProgressView(value: Float(woksAdded), total: Float(woksAdded))
             .padding(10)
-        ProgressView(value: Float(mapsAdded), total: Float(woksAdded.words.count))
+        ProgressView(value: Float(mapsAdded), total: Float(woksAdded))
             .padding(10)
             .tint(.green)
-        ProgressView(value: Float(stravasAdded), total: Float(woksAdded.words.count))
+        ProgressView(value: Float(stravasAdded), total: Float(woksAdded))
             .padding(10)
             .tint(.orange)
         List(works.indices, id: \.self) { idx in
@@ -285,88 +293,112 @@ struct StravaHealth: View {
                         // Fallback on earlier versions
                     }
                 } else {
-                    Button("Get map") {
-                        Task {
-                            await getLocationDataForRoute(idx: idx)
+                    HStack {
+                        Button("Get map") {
+                            Task {
+                                await getLocationDataForRoute(idx: idx)
+                            }
+                        }.buttonStyle(.bordered)
+                        Spacer()
+                        Button("Share File") {
+                            doctoexport = TextFile(initialText: togpxstring(idx: idx, sWorks), ifilename: "\(works[idx].work.startDate.ISO8601Format())-train-run.gpx")
+                            showingExporter = true
+                        }.buttonStyle(.bordered)
+                    }
+                    
+                }
+                if works[idx].polyline != nil {
+                    Button("Share File") {
+                        doctoexport = TextFile(initialText: togpxstring(idx: idx, sWorks), ifilename: "\(works[idx].work.startDate.ISO8601Format())-train-run.gpx")
+                        showingExporter = true
+                    }.buttonStyle(.bordered)
+                }
+                
+            }
+        }.fileExporter(isPresented: $showingExporter, document: doctoexport, contentType: .plainText) { result in
+            switch result {
+            case .success(let url):
+                print("Saved to \(url)")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        HStack {
+            VStack {
+                if #available(iOS 17.0, *) {
+                    Button("Access health data") {
+                        // OK to read or write HealthKit data here.
+                        readStepCountThisWeek()
+                    }
+                    .disabled(!authenticated)
+                    
+                    // If HealthKit data is available, request authorization
+                    // when this view appears.
+                    .onAppear {
+                        
+                        // Check that Health data is available on the device.
+                        if HKHealthStore.isHealthDataAvailable() {
+                            // Modifying the trigger initiates the health data
+                            // access request.
+                            trigger.toggle()
                         }
                     }
-                }
-            }
-        }
-        
-        if #available(iOS 17.0, *) {
-            Button("Access health data") {
-                // OK to read or write HealthKit data here.
-                readStepCountThisWeek()
-            }
-            .disabled(!authenticated)
-            
-            // If HealthKit data is available, request authorization
-            // when this view appears.
-            .onAppear {
-                
-                // Check that Health data is available on the device.
-                if HKHealthStore.isHealthDataAvailable() {
-                    // Modifying the trigger initiates the health data
-                    // access request.
-                    trigger.toggle()
-                }
-            }
-            
-            // Requests access to share and read HealthKit data types
-            // when the trigger changes.
-            .healthDataAccessRequest(store: healthStore,
-                                     shareTypes: allTypes,
-                                     readTypes: allTypes,
-                                     trigger: trigger) { result in
-                switch result {
                     
-                case .success(_):
-                    authenticated = true
-                case .failure(let error):
-                    // Handle the error here.
-                    fatalError("*** An error occurred while requesting authentication: \(error) ***")
+                    // Requests access to share and read HealthKit data types
+                    // when the trigger changes.
+                    .healthDataAccessRequest(store: healthStore,
+                                             shareTypes: allTypes,
+                                             readTypes: allTypes,
+                                             trigger: trigger) { result in
+                        switch result {
+                            
+                        case .success(_):
+                            authenticated = true
+                        case .failure(let error):
+                            // Handle the error here.
+                            fatalError("*** An error occurred while requesting authentication: \(error) ***")
+                        }
+                    }.padding(5)
+                } else {
+                    // Fallback on earlier versions
+                    Text("No ios 17")
                 }
-            }.padding(5)
-        } else {
-            // Fallback on earlier versions
-            Text("No ios 17")
-        }
-        Button("Get workouts") {
-            Task {
-                totQaunt = 0
-                let routes = await readWorkouts()
-                for number in 0..<routes!.count {
-                    let wok = routes?[number]
-                    print("on \(String(describing: wok?.endDate.formatted(.dateTime))) with duration \(String(format: "%.1f", (wok?.duration ?? 0.0)/60)) min and nr \(number) and \(String(describing: wok?.allStatistics))")
-                    let distance = wok?.statistics(for: .init(wkQauntType))?.sumQuantity()
-                    totQaunt += distance?.doubleValue(for: HKUnit.meter()) ?? 0
-                    let cals = wok?.statistics(for: .init(.activeEnergyBurned))?.sumQuantity()
-                    works.append(Works(text: "Distance is \(Int(distance?.doubleValue(for: HKUnit.meter()) ?? 0.0)/1000) km with duration \(String(format: "%.1f", (wok?.duration ?? 0.0)/60)) min on \(wok?.endDate.formatted(.dateTime) ?? Date().formatted(.dateTime)) and burned \(Int(cals?.doubleValue(for: HKUnit.largeCalorie()) ?? 0.0)) kcals", work: wok!))
-                    AddToSWorks(wok: wok, idx: number)
+                Button("Get workouts") {
+                    Task {
+                        totQaunt = 0
+                        let routes = await readWorkouts()
+                        swoksTBadded = routes!.count
+                        for number in 0..<routes!.count {
+                            let wok = routes?[number]
+                            print("on \(String(describing: wok?.endDate.formatted(.dateTime))) with duration \(String(format: "%.1f", (wok?.duration ?? 0.0)/60)) min and nr \(number) and \(String(describing: wok?.allStatistics))")
+                            let distance = wok?.statistics(for: .init(wkQauntType))?.sumQuantity()
+                            totQaunt += distance?.doubleValue(for: HKUnit.meter()) ?? 0
+                            let cals = wok?.statistics(for: .init(.activeEnergyBurned))?.sumQuantity()
+                            works.append(Works(text: "Distance is \(Int(distance?.doubleValue(for: HKUnit.meter()) ?? 0.0)/1000) km with duration \(String(format: "%.1f", (wok?.duration ?? 0.0)/60)) min on \(wok?.endDate.formatted(.dateTime) ?? Date().formatted(.dateTime)) and burned \(Int(cals?.doubleValue(for: HKUnit.largeCalorie()) ?? 0.0)) kcals", work: wok!))
+                            AddToSWorks(wok: wok, idx: number)
+                            
+                        }
+                        
+                    }
+                }.padding(5)
+                Button("Convert to Strava") {
+                    let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+                    let documentsDirectory = paths[0]
+                    let docURL = URL(string: documentsDirectory)!
+                    let dataPath = docURL.appendingPathComponent("stravas")
+                    if !FileManager.default.fileExists(atPath: dataPath.path) {
+                        do {
+                            try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
                     
-                }
-                
-            }
-        }.padding(5)
-        Button("Convert to Strava") {
-            let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            let documentsDirectory = paths[0]
-            let docURL = URL(string: documentsDirectory)!
-            let dataPath = docURL.appendingPathComponent("stravas")
-            if !FileManager.default.fileExists(atPath: dataPath.path) {
-                do {
-                    try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-            
-            for idx in 0..<sWorks.count { // make sure that only data from before 14-12-2024 (that is index 14 and higher) is entreted into the gpx file
-            //let idx = 0
-            //if true {
-            // reset the string with at each new workout
-                    gpxString = """
+                    for idx in 0..<sWorks.count { // make sure that only data from before 14-12-2024 (that is index 14 and higher) is entreted into the gpx file
+                        //let idx = 0
+                        //if true {
+                        // reset the string with at each new workout
+                        gpxString = """
                  <?xml version="1.0" encoding="UTF-8"?>
                  <gpx
                    version="1.1"
@@ -384,54 +416,86 @@ struct StravaHealth: View {
                    <trkseg>
                  
                  """
-                    let swok = sWorks[idx]
-                    sWorks[idx].hrs? = Array(swok.hrs?.reversed() ?? [])
-                    for i in 0..<swok.cords.count {
-                        let hrr = sWorks[idx].hrs?.filter { abs($0.0.timeIntervalSinceReferenceDate - (sWorks[idx].cords[i]?.timestamp.timeIntervalSinceReferenceDate ?? 0.0)) < 15}
-                        
-                        if (hrr?.count ?? 0) > 0 {
-                            if hrr?.count == 1 {
-                                let hr = hrr![0].1
-                                gpxString += "<trkpt lat=\"\(swok.cords[i]?.coordinate.latitude ?? 0.0)\" lon=\"\(swok.cords[i]?.coordinate.longitude ?? 0.0)\"><ele>\(swok.cords[i]?.altitude ?? 0.0)</ele><time>\(swok.cords[i]?.timestamp.ISO8601Format() ?? "no date")</time><extensions><gpxtpx:TrackPointExtension><gpxtpx:hr>\(hr)</gpxtpx:hr></gpxtpx:TrackPointExtension></extensions></trkpt>\n\r"
-                            } else if (hrr?.count ?? 0) > 1 {
-                                let hr = hrr![Int(hrr!.count/2)].1
-                                gpxString += "<trkpt lat=\"\(swok.cords[i]?.coordinate.latitude ?? 0.0)\" lon=\"\(swok.cords[i]?.coordinate.longitude ?? 0.0)\"><ele>\(swok.cords[i]?.altitude ?? 0.0)</ele><time>\(swok.cords[i]?.timestamp.ISO8601Format() ?? "no date")</time><extensions><gpxtpx:TrackPointExtension><gpxtpx:hr>\(hr)</gpxtpx:hr></gpxtpx:TrackPointExtension></extensions></trkpt>\n\r"
+                        let swok = sWorks[idx]
+                        sWorks[idx].hrs? = Array(swok.hrs?.reversed() ?? [])
+                        for i in 0..<swok.cords.count {
+                            let hrr = sWorks[idx].hrs?.filter { abs($0.0.timeIntervalSinceReferenceDate - (sWorks[idx].cords[i]?.timestamp.timeIntervalSinceReferenceDate ?? 0.0)) < 15}
+                            
+                            if (hrr?.count ?? 0) > 0 {
+                                if hrr?.count == 1 {
+                                    let hr = hrr![0].1
+                                    gpxString += "<trkpt lat=\"\(swok.cords[i]?.coordinate.latitude ?? 0.0)\" lon=\"\(swok.cords[i]?.coordinate.longitude ?? 0.0)\"><ele>\(swok.cords[i]?.altitude ?? 0.0)</ele><time>\(swok.cords[i]?.timestamp.ISO8601Format() ?? "no date")</time><extensions><gpxtpx:TrackPointExtension><gpxtpx:hr>\(hr)</gpxtpx:hr></gpxtpx:TrackPointExtension></extensions></trkpt>\n\r"
+                                } else if (hrr?.count ?? 0) > 1 {
+                                    let hr = hrr![Int(hrr!.count/2)].1
+                                    gpxString += "<trkpt lat=\"\(swok.cords[i]?.coordinate.latitude ?? 0.0)\" lon=\"\(swok.cords[i]?.coordinate.longitude ?? 0.0)\"><ele>\(swok.cords[i]?.altitude ?? 0.0)</ele><time>\(swok.cords[i]?.timestamp.ISO8601Format() ?? "no date")</time><extensions><gpxtpx:TrackPointExtension><gpxtpx:hr>\(hr)</gpxtpx:hr></gpxtpx:TrackPointExtension></extensions></trkpt>\n\r"
+                                }
+                            }
+                            else {
+                                gpxString += "<trkpt lat=\"\(swok.cords[i]?.coordinate.latitude ?? 0.0)\" lon=\"\(swok.cords[i]?.coordinate.longitude ?? 0.0)\"><ele>\(swok.cords[i]?.altitude ?? 0.0)</ele><time>\(swok.cords[i]?.timestamp.ISO8601Format() ?? "no date")</time></trkpt>\n\r"
                             }
                         }
-                        else {
-                            gpxString += "<trkpt lat=\"\(swok.cords[i]?.coordinate.latitude ?? 0.0)\" lon=\"\(swok.cords[i]?.coordinate.longitude ?? 0.0)\"><ele>\(swok.cords[i]?.altitude ?? 0.0)</ele><time>\(swok.cords[i]?.timestamp.ISO8601Format() ?? "no date")</time></trkpt>\n\r"
+                        gpxString += "</trkseg></trk></gpx>"
+                        
+                        //let pasteboard = UIPasteboard.general
+                        //pasteboard.string = gpxString
+                        
+                        gpxwoks.append(pser(filename: "\(swok.start_date_local).gpx", name: "\(swok.name)"))
+                        stravasAdded += 1
+                        
+                        let filename = getDocumentsDirectory().appendingPathComponent("\(swok.start_date_local).gpx")
+                        do {
+                            try gpxString.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
+                            print("\(stravasAdded) written gpxString to \(filename)")
+                        } catch {
+                            print("Error with writing to disk: \(error.localizedDescription)")
+                            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
                         }
                     }
-                    gpxString += "</trkseg></trk></gpx>"
-                   
-                    //let pasteboard = UIPasteboard.general
-                    //pasteboard.string = gpxString
-                    
-                    gpxwoks.append(pser(filename: "\(swok.start_date_local).gpx", name: "\(swok.name)"))
-                    stravasAdded += 1
-                    
-                    let filename = getDocumentsDirectory().appendingPathComponent("\(swok.start_date_local).gpx")
+                    print("dateWithoutData: \(dateWithoutData)")
+                    UIPasteboard.general.string = gpxwoks.description
+                    let filename = getDocumentsDirectory().appendingPathComponent("thestravas.json")
                     do {
-                        try gpxString.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
-                        print("\(stravasAdded) written gpxString to \(filename)")
+                        try gpxwoks.description.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
                     } catch {
                         print("Error with writing to disk: \(error.localizedDescription)")
                         // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
                     }
+                    btncl = .orange
+                }
+                .padding(5)
+                .tint(btncl)
             }
-            print("dateWithoutData: \(dateWithoutData)")
-            UIPasteboard.general.string = gpxwoks.description
-            let filename = getDocumentsDirectory().appendingPathComponent("thestravas.json")
-            do {
-                try gpxwoks.description.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
-            } catch {
-                print("Error with writing to disk: \(error.localizedDescription)")
-                // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+            
+            
+            if #available(iOS 17.0, *) {
+                DatePicker(selection: $activityonDate, in: ...Date.now, displayedComponents: .date) {
+                    Text("Select a date")
+                }.onChange(of: activityonDate) { ov, nv in
+                    var TokeepUUIDs: [String] = []
+                    for work in works {
+                        if work.work.startDate.timeIntervalSince1970 < nv.timeIntervalSince1970 {
+                            // Als het eerder is gebrud dat geselcteerde datum
+                            TokeepUUIDs.append(work.id.uuidString)
+
+                        } else {
+                            // Als het later is gebrud dat geselcteerde datum
+                        }
+                    }
+                    // filter list of works
+                    works = works.filter { wid in
+                        var tokeep = false
+                        for kuuid in TokeepUUIDs {
+                            if wid.id.uuidString == kuuid {
+                                tokeep = true
+                            }
+                        }
+                        return tokeep
+                    }
+                    
+                }
+                .padding(5)
             }
-            btncl = .orange
         }
-        .padding(5)
-        .tint(btncl)
     }
     
     func getDocumentsDirectory() -> URL {
@@ -483,8 +547,8 @@ struct StravaHealth: View {
             result.enumerateStatistics(from: startOfWeek, to: endOfWeek) { statistics, _ in
                 if let quantity = statistics.sumQuantity() {
                     let steps = Int(quantity.doubleValue(for: HKUnit.count()))
-                    let day = calendar.component(.weekday, from: statistics.startDate)
-                    self.stepCountToday[day] = steps
+                    // let weekday = calendar.component(.weekday, from: statistics.startDate)
+                    self.stepCountToday.append(steps)
                 }
             }
         }
@@ -592,6 +656,81 @@ extension HKWorkoutActivityType {
         default: return "UNKNOWN"
         }
     }
+}
+
+struct TextFile: FileDocument {
+    // tell the system we support only plain text
+    static var readableContentTypes = [UTType.plainText]
+
+    // by default our document is empty
+    var text = ""
+    var filename = ""
+
+    // a simple initializer that creates new, empty documents
+    init(initialText: String = "", ifilename: String = "") {
+        text = initialText
+        filename = ifilename
+    }
+
+    // this initializer loads data that has been saved previously
+    init(configuration: ReadConfiguration) throws {
+        configuration.file.filename = filename
+        configuration.file.preferredFilename = filename
+        if let data = configuration.file.regularFileContents {
+            text = String(decoding: data, as: UTF8.self)
+        }
+    }
+
+    // this will be called when the system wants to write our data to disk
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        configuration.existingFile?.filename = filename
+        configuration.existingFile?.preferredFilename = filename
+        let data = Data(text.utf8)
+        return FileWrapper(regularFileWithContents: data)
+    }
+}
+
+func togpxstring(idx: Int, _ sWorks: [SWork]) -> String {
+    var gpxString = """
+ <?xml version="1.0" encoding="UTF-8"?>
+ <gpx
+   version="1.1"
+   creator="Apple Watch SE"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="http://www.topografix.com/GPX/1/1"
+   xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+   xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1">
+   <metadata>
+    <time>\(sWorks[idx].start_date_local)</time>
+   </metadata>
+  <trk>
+   <name>\(sWorks[idx].name)</name>
+   <type>running</type>
+   <trkseg>
+ 
+ """
+    var swok = sWorks[idx]
+    swok.hrs = Array(swok.hrs?.reversed() ?? [])
+    for i in 0..<swok.cords.count {
+        let hrr = sWorks[idx].hrs?.filter { abs($0.0.timeIntervalSinceReferenceDate - (sWorks[idx].cords[i]?.timestamp.timeIntervalSinceReferenceDate ?? 0.0)) < 15}
+        
+        if (hrr?.count ?? 0) > 0 {
+            if hrr?.count == 1 {
+                let hr = hrr![0].1
+                gpxString += "<trkpt lat=\"\(swok.cords[i]?.coordinate.latitude ?? 0.0)\" lon=\"\(swok.cords[i]?.coordinate.longitude ?? 0.0)\"><ele>\(swok.cords[i]?.altitude ?? 0.0)</ele><time>\(swok.cords[i]?.timestamp.ISO8601Format() ?? "no date")</time><extensions><gpxtpx:TrackPointExtension><gpxtpx:hr>\(hr)</gpxtpx:hr></gpxtpx:TrackPointExtension></extensions></trkpt>\n\r"
+            } else if (hrr?.count ?? 0) > 1 {
+                let hr = hrr![Int(hrr!.count/2)].1
+                gpxString += "<trkpt lat=\"\(swok.cords[i]?.coordinate.latitude ?? 0.0)\" lon=\"\(swok.cords[i]?.coordinate.longitude ?? 0.0)\"><ele>\(swok.cords[i]?.altitude ?? 0.0)</ele><time>\(swok.cords[i]?.timestamp.ISO8601Format() ?? "no date")</time><extensions><gpxtpx:TrackPointExtension><gpxtpx:hr>\(hr)</gpxtpx:hr></gpxtpx:TrackPointExtension></extensions></trkpt>\n\r"
+            }
+        }
+        else {
+            gpxString += "<trkpt lat=\"\(swok.cords[i]?.coordinate.latitude ?? 0.0)\" lon=\"\(swok.cords[i]?.coordinate.longitude ?? 0.0)\"><ele>\(swok.cords[i]?.altitude ?? 0.0)</ele><time>\(swok.cords[i]?.timestamp.ISO8601Format() ?? "no date")</time></trkpt>\n\r"
+        }
+    }
+    gpxString += "</trkseg></trk></gpx>"
+   
+    return gpxString
+    
 }
 
 #Preview {
